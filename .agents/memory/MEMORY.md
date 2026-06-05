@@ -1,0 +1,1 @@
+- [Vite inline script transform](vite-inline-script.md) — inline `<script>` in Vite HTML gets esbuild-transformed; move game/legacy JS to `public/` to serve it raw.

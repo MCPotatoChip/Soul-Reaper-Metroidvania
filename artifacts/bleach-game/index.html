@@ -1,0 +1,150 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bleach: Soul Society Underground</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;overflow:hidden;font-family:'Segoe UI',sans-serif;display:flex;justify-content:center;align-items:center;height:100vh}
+canvas{display:block;image-rendering:pixelated}
+#title-screen{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;background:linear-gradient(180deg,#0a0a0a 0%,#1a0a2a 50%,#0a0a0a 100%);z-index:100;transition:opacity 1s;cursor:pointer}
+#title-screen h1{font-size:64px;color:#ff6a00;text-shadow:0 0 30px #ff4500,0 0 60px #ff2200;font-family:'Georgia',serif;letter-spacing:8px;margin-bottom:10px}
+#title-screen h2{font-size:22px;color:#8888cc;letter-spacing:10px;margin-bottom:50px}
+#title-screen .start-btn{font-size:18px;color:#aaa;animation:pulse 2s infinite;letter-spacing:4px}
+#title-screen .controls{color:#666;font-size:11px;margin-top:40px;text-align:center;line-height:2}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+#game-over-screen{position:absolute;top:0;left:0;width:100%;height:100%;display:none;flex-direction:column;justify-content:center;align-items:center;background:rgba(10,0,0,.95);z-index:100;cursor:pointer}
+#game-over-screen h1{font-size:48px;color:#ff2222;margin-bottom:20px}
+#game-over-screen p{font-size:16px;color:#888;animation:pulse 2s infinite}
+#dialogue-box{position:absolute;bottom:50px;left:50%;transform:translateX(-50%);width:660px;max-width:94%;background:rgba(6,3,16,.97);border:2px solid #6666bb;border-radius:12px;padding:18px 22px;display:none;z-index:50;cursor:pointer;box-shadow:0 0 40px rgba(80,60,140,.5)}
+#dlg-inner{display:flex;align-items:flex-start;gap:14px}
+#dlg-portrait{width:56px;height:56px;border-radius:50%;border:2px solid #777;flex-shrink:0;overflow:hidden;background:#1a1028}
+#dlg-portrait canvas{width:56px;height:56px}
+#dlg-right{flex:1}
+#dialogue-name{color:#ff9955;font-size:15px;font-weight:bold;margin-bottom:5px;text-shadow:0 0 8px rgba(255,140,60,.3)}
+#dialogue-text{color:#ddddee;font-size:13px;line-height:1.7;min-height:36px}
+#dialogue-continue{color:#999;font-size:10px;text-align:right;margin-top:8px;animation:pulse 1.5s infinite}
+#shop-ui{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:540px;max-width:94%;background:rgba(6,3,16,.97);border:2px solid #44aa44;border-radius:12px;padding:24px;display:none;z-index:50;box-shadow:0 0 30px rgba(60,140,60,.3)}
+#shop-ui h2{color:#55dd55;text-align:center;margin-bottom:6px}
+#shop-coins{text-align:center;color:#ffdd44;margin-bottom:14px;font-size:15px}
+.shop-item{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;margin:5px 0;border:1px solid #444;border-radius:6px;cursor:pointer;color:#ccc;transition:all .2s}
+.shop-item:hover{background:rgba(68,170,68,.2);border-color:#55aa55}
+.shop-item.sold{opacity:.3;pointer-events:none}
+.shop-item.cant-afford{opacity:.45}
+.si-name{font-weight:bold;font-size:13px}.si-desc{font-size:11px;color:#999;margin-top:2px}
+.price{color:#ffcc00;font-weight:bold;font-size:14px}
+#map-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(5,2,15,.96);display:none;justify-content:center;align-items:center;z-index:80}
+#map-canvas{border:2px solid #444;border-radius:8px}
+#notif{position:absolute;top:75px;left:50%;transform:translateX(-50%);color:#ffdd44;font-size:14px;font-family:Georgia,serif;text-align:center;opacity:0;transition:opacity .5s;z-index:40;text-shadow:0 0 12px rgba(255,200,60,.6);pointer-events:none;white-space:nowrap}
+#ability-popup{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(6,3,16,.97);border:2px solid #ffaa33;border-radius:14px;padding:30px 40px;display:none;z-index:60;text-align:center;box-shadow:0 0 50px rgba(255,160,40,.4)}
+#ability-popup h2{color:#ffaa33;margin-bottom:10px;font-size:22px}
+#ability-popup p{color:#ccc;font-size:13px;line-height:1.6;margin-bottom:15px;white-space:pre-line}
+#ability-popup .dismiss{color:#888;font-size:11px;animation:pulse 1.5s infinite}
+#transition-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:#000;opacity:0;pointer-events:none;z-index:90;transition:opacity .3s}
+#charge-indicator{position:absolute;bottom:110px;left:50%;transform:translateX(-50%);display:none;flex-direction:column;align-items:center;gap:4px;z-index:40;pointer-events:none}
+#charge-bar-bg{width:120px;height:8px;background:#1a1a33;border:1px solid #3366aa;border-radius:4px}
+#charge-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#3366ff,#66aaff);border-radius:4px;transition:width .05s}
+#charge-label{color:#66aaff;font-size:10px;letter-spacing:2px;text-shadow:0 0 8px #3366ff}
+#mobile-controls{display:none;position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:35;touch-action:none}
+#joystick-zone{position:absolute;bottom:30px;left:30px;width:140px;height:140px;pointer-events:auto;touch-action:none}
+#joy-base{width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.15);position:absolute;left:10px;top:10px}
+#joy-knob{width:50px;height:50px;border-radius:50%;background:rgba(255,140,0,.35);border:2px solid rgba(255,140,0,.5);position:absolute;left:45px;top:45px;transition:none}
+#action-buttons{position:absolute;bottom:30px;right:20px;display:flex;flex-wrap:wrap;gap:8px;width:180px;justify-content:flex-end;pointer-events:auto;touch-action:none}
+.act-btn{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;color:#ccc;font-size:10px;font-family:monospace;font-weight:bold;user-select:none;-webkit-user-select:none;text-shadow:0 0 6px rgba(255,255,255,.3)}
+.act-btn:active,.act-btn.pressed{background:rgba(255,160,0,.3);border-color:rgba(255,160,0,.6)}
+.act-btn.btn-jump{background:rgba(80,200,120,.1);border-color:rgba(80,200,120,.25)}
+.act-btn.btn-atk{background:rgba(100,150,255,.1);border-color:rgba(100,150,255,.25)}
+.act-btn.btn-dash{background:rgba(100,200,255,.1);border-color:rgba(100,200,255,.25)}
+#mobile-extra{position:absolute;top:12px;right:12px;display:flex;gap:6px;pointer-events:auto;touch-action:none}
+.extra-btn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;color:#999;font-size:9px;font-family:monospace}
+#settings-btn{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);cursor:pointer;display:flex;align-items:center;justify-content:center;color:#888;font-size:16px;z-index:105}
+#settings-btn:hover{background:rgba(255,255,255,.12);color:#ccc}
+#settings-ui{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:580px;max-width:95%;max-height:85vh;background:rgba(6,3,16,.97);border:2px solid #8866cc;border-radius:14px;padding:24px;display:none;z-index:110;box-shadow:0 0 40px rgba(100,60,180,.4);overflow-y:auto;color:#ccc}
+#settings-ui h2{color:#aa88ee;text-align:center;margin-bottom:16px;font-size:20px}
+.settings-tabs{display:flex;justify-content:center;gap:8px;margin-bottom:16px}
+.stab{padding:6px 18px;border-radius:6px;background:rgba(255,255,255,.05);border:1px solid #444;cursor:pointer;color:#aaa;font-size:13px;transition:all .2s}
+.stab.active{background:rgba(136,102,204,.2);border-color:#8866cc;color:#cc99ff}
+.stab:hover{background:rgba(136,102,204,.1)}
+.bind-row{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;margin:3px 0;border:1px solid #333;border-radius:6px}
+.bind-action{font-size:13px;color:#bbb;font-weight:bold;min-width:110px}
+.bind-key{padding:4px 14px;border-radius:4px;background:rgba(255,255,255,.06);border:1px solid #555;cursor:pointer;color:#ddd;font-size:12px;font-family:monospace;min-width:90px;text-align:center;transition:all .2s}
+.bind-key:hover{border-color:#8866cc;background:rgba(136,102,204,.15)}
+.bind-key.listening{border-color:#ffaa33;background:rgba(255,170,50,.15);color:#ffaa33;animation:pulse 1s infinite}
+.settings-footer{display:flex;justify-content:center;gap:12px;margin-top:18px}
+.settings-footer button{padding:6px 20px;border-radius:6px;border:1px solid #555;background:rgba(255,255,255,.06);color:#ccc;cursor:pointer;font-size:12px;transition:all .2s}
+.settings-footer button:hover{background:rgba(136,102,204,.15);border-color:#8866cc}
+</style>
+</head>
+<body>
+<canvas id="game-canvas"></canvas>
+<div id="title-screen">
+  <h1>BLEACH</h1><h2>SOUL SOCIETY UNDERGROUND</h2>
+  <div class="start-btn">PRESS ENTER OR CLICK TO START</div>
+  <div class="controls">
+    A/D or ←/→: Move &nbsp;|&nbsp; Space/↑: Jump &nbsp;|&nbsp; J: Zanpakuto &nbsp;|&nbsp; K: Getsuga Tenshō &nbsp;|&nbsp; L: Cero<br>
+    Shift: Flash Step &nbsp;|&nbsp; F: Heal &nbsp;|&nbsp; C: Charge Reiatsu &nbsp;|&nbsp; E: Interact &nbsp;|&nbsp; M: Map &nbsp;|&nbsp; B: Bankai &nbsp;|&nbsp; H: Hollow Mask
+  </div>
+</div>
+<div id="game-over-screen"><h1>YOUR SOUL FADES</h1><p>Click or press Space to return</p></div>
+<div id="dialogue-box">
+  <div id="dlg-inner">
+    <div id="dlg-portrait"><canvas id="portrait-canvas" width="56" height="56"></canvas></div>
+    <div id="dlg-right"><div id="dialogue-name"></div><div id="dialogue-text"></div></div>
+  </div>
+  <div id="dialogue-continue">▼ Click or Space</div>
+</div>
+<div id="shop-ui">
+  <h2>🏪 URAHARA'S SHOP</h2>
+  <div id="shop-coins"></div>
+  <div id="shop-items"></div>
+  <p style="color:#666;text-align:center;margin-top:12px;font-size:11px">Press ESC to close</p>
+</div>
+<div id="map-overlay"><canvas id="map-canvas" width="750" height="500"></canvas></div>
+<div id="notif"></div>
+<div id="ability-popup"><h2 id="ap-title"></h2><p id="ap-desc"></p><div class="dismiss">Click or Space to continue</div></div>
+<div id="charge-indicator">
+  <div id="charge-bar-bg"><div id="charge-bar-fill"></div></div>
+  <div id="charge-label">REIATSU CHARGE</div>
+</div>
+<div id="transition-overlay"></div>
+<div id="settings-btn" title="Settings">⚙</div>
+<div id="settings-ui">
+  <h2>⚙ SETTINGS</h2>
+  <div class="settings-tabs">
+    <div class="stab active" data-tab="keyboard">Keyboard</div>
+    <div class="stab" data-tab="controller">Controller</div>
+  </div>
+  <div id="bindings-list"></div>
+  <div style="text-align:center;margin-bottom:15px;">
+    <label style="color:#ddd;font-size:14px;margin-right:10px;">Screen Shake Intensity:</label>
+    <input type="range" id="shake-slider" min="0" max="1.5" step="0.1" value="1" style="vertical-align:middle;cursor:pointer;">
+  </div>
+  <div class="settings-footer">
+    <button id="reset-binds">Reset Defaults</button>
+    <button id="close-settings">Close (ESC)</button>
+  </div>
+</div>
+<div id="mobile-controls">
+  <div id="joystick-zone">
+    <div id="joy-base"></div>
+    <div id="joy-knob"></div>
+  </div>
+  <div id="action-buttons">
+    <div class="act-btn btn-jump" data-action="jump">JUMP</div>
+    <div class="act-btn btn-atk" data-action="attack">ATK</div>
+    <div class="act-btn btn-dash" data-action="dash">DASH</div>
+    <div class="act-btn" data-action="getsuga">GET</div>
+    <div class="act-btn" data-action="cero">CERO</div>
+    <div class="act-btn" data-action="heal">HEAL</div>
+    <div class="act-btn" data-action="interact">E</div>
+    <div class="act-btn" data-action="charge">CHG</div>
+  </div>
+  <div id="mobile-extra">
+    <div class="extra-btn" data-action="map">MAP</div>
+    <div class="extra-btn" data-action="bankai">BNK</div>
+    <div class="extra-btn" data-action="hollow">HLW</div>
+  </div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>

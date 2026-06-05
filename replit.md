@@ -1,36 +1,35 @@
-# [Project name]
+# Bleach: Soul Society Underground
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+A Bleach-themed metroidvania browser game — explore Soul Society, fight Hollows and Shinigami captains, unlock abilities, and challenge bosses across multiple areas.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
+- `pnpm --filter @workspace/bleach-game run dev` — run the game (port 25980, preview at `/`)
+- `pnpm --filter @workspace/api-server run dev` — run the API server (port 8080)
 - `pnpm run typecheck` — full typecheck across all packages
-- `pnpm run build` — typecheck + build all packages
-- `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
 
 ## Stack
 
 - pnpm workspaces, Node.js 24, TypeScript 5.9
-- API: Express 5
-- DB: PostgreSQL + Drizzle ORM
-- Validation: Zod (`zod/v4`), `drizzle-zod`
-- API codegen: Orval (from OpenAPI spec)
-- Build: esbuild (CJS bundle)
+- Game: vanilla HTML/CSS/JS (canvas-based), served via Vite as static files
+- API: Express 5 (unused by game currently)
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/bleach-game/index.html` — game HTML shell (CSS + DOM structure)
+- `artifacts/bleach-game/public/game.js` — all game logic (served raw, no Vite transform)
+- `artifacts/bleach-game/vite.config.ts` — Vite config (no React/Tailwind plugins)
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- Game JS lives in `public/game.js`, NOT as an inline `<script>` — Vite's esbuild transform on inline scripts causes a SyntaxError even for valid browser JS. Files in `public/` are served byte-for-byte without transformation.
+- No React or Tailwind plugins in vite.config — the game is pure vanilla canvas JS.
 
-## Product
+## Bugs fixed from original source
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+1. `GS_SETTINGS` was `8`, colliding with `GS.BOSS_INTRO=8` → changed to `99`
+2. `En` (enemy) constructor never initialized `this.jcd` (jump cooldown) → added `this.jcd=0;`
+3. Boss intro ternary chain was missing its final `: ""` fallback on the Ulquiorra case → fixed
 
 ## User preferences
 
@@ -38,8 +37,5 @@ _Populate as you build — explicit user instructions worth remembering across s
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
-
-## Pointers
-
-- See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details
+- Game JS **must** stay in `public/game.js` (or another `public/` path). Moving it back inline or to `src/` will cause Vite/esbuild to mangle it.
+- The game uses global variables throughout — it is not a module and cannot be `import`ed.
