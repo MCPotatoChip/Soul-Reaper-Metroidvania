@@ -1648,10 +1648,7 @@ class Bs{
       this.defeated=true;this.state='dead';this.st=120;shk=20;AU.play('roar');
       P.cn+=this.type==='ulquiorra'?200:(this.type==='grimmjow'?150:100);
       notify(this.name+' defeated!');
-      if(this.type==='renji'){const rm=RM['boss1'];for(let y=10;y<=11;y++)rm.tiles[y][rm.w-1]=0;rm.trans.push({x:rm.w-1,yA:10,yB:11,to:'post_renji',tx:2,ty:13});}
-      if(this.type==='byakuya'){const rm=RM['boss2'];for(let y=10;y<=11;y++)rm.tiles[y][rm.w-1]=0;rm.trans.push({x:rm.w-1,yA:10,yB:11,to:'victory',tx:2,ty:11});}
-      if(this.type==='grimmjow'){const rm=RM['boss3'];for(let y=10;y<=11;y++)rm.tiles[y][rm.w-1]=0;rm.trans.push({x:rm.w-1,yA:10,yB:11,to:'post_grimm',tx:2,ty:13});}
-      if(this.type==='ulquiorra'){const rm=RM['boss4'];for(let y=12;y<=13;y++)rm.tiles[y][rm.w-1]=0;rm.trans.push({x:rm.w-1,yA:12,yB:13,to:'ending',tx:2,ty:11});}
+      openBossDoor(cID);
     }
   }
 
@@ -2235,12 +2232,29 @@ let cR=null,cID='r1',ens=[],npcs=[],boss=null;
 let dB=new Set(),vis=new Set();
 let dlgA=false,dlgN=null,dlgI=0,dlgT=0;
 
+function openBossDoor(id){
+  const cfg={
+    boss1:{rows:[10,11],dest:'post_renji',tx:2,ty:13},
+    boss2:{rows:[10,11],dest:'victory',   tx:2,ty:11},
+    boss3:{rows:[10,11],dest:'post_grimm',tx:2,ty:13},
+    boss4:{rows:[12,13],dest:'ending',    tx:2,ty:11},
+  };
+  const c=cfg[id];if(!c)return;
+  const rm=RM[id];
+  // Clear door tiles
+  for(const y of c.rows)rm.tiles[y][rm.w-1]=0;
+  // Add exit transition only if it isn't already present
+  const alreadyThere=rm.trans.some(t=>t.x===rm.w-1&&t.yA===c.rows[0]);
+  if(!alreadyThere)rm.trans.push({x:rm.w-1,yA:c.rows[0],yB:c.rows[1],to:c.dest,tx:c.tx,ty:c.ty});
+}
+
 function loadRoom(id){
   cID=id;const rd=RM[id];if(!rd)return;cR=rd;vis.add(id);
   ens=rd.enemies.map(e=>new En(e.x,e.y,e.type));
   npcs=rd.npcs?rd.npcs.map(n=>new NC(n)):[];
   boss=null;bPr=[];
   if(rd.boss&&!dB.has(id))boss=new Bs(rd.boss.x,rd.boss.y,rd.boss.type);
+  if(rd.boss&&dB.has(id))openBossDoor(id);
   projs=[];pts.length=0;
   cam.x=P.x-C.width/2;cam.y=P.y-C.height/2;
   tLock=true;setTimeout(()=>tLock=false,350);
