@@ -538,11 +538,21 @@ RM['r3']={zone:'rukon',w:45,h:17,
 RM['s1']={zone:'seireitei',w:40,h:17,
   tiles:(()=>{let w=40,h=17,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2)?1:0;}
   for(let y=0;y<h;y++){if(y!==13&&y!==14)t[y][0]=1;if(y!==13&&y!==14)t[y][w-1]=1;}
-  for(let p=0;p<4;p++){const px=8+p*8;for(let py=5;py<15;py++)t[py][px]=1;}
-  for(let x=3;x<8;x++)t[8][x]=2;for(let x=9;x<16;x++)t[6][x]=2;
-  for(let x=17;x<24;x++)t[8][x]=2;for(let x=25;x<32;x++)t[6][x]=2;
-  for(let x=33;x<38;x++)t[10][x]=2;return t;})(),
-  enemies:[{type:'guard',x:10,y:13},{type:'guard',x:22,y:13},{type:'guard',x:34,y:9}],
+  // Seireitei gate arch pillars — wide enough that guards can patrol between them
+  for(let py=5;py<15;py++){t[py][15]=1;t[py][16]=1;} // left gate pillar pair
+  for(let py=5;py<15;py++){t[py][23]=1;t[py][24]=1;} // right gate pillar pair
+  // Left section platforms (open ground below)
+  for(let x=3;x<10;x++)t[9][x]=2;   // left low platform
+  for(let x=3;x<8;x++)t[6][x]=2;    // left high platform
+  for(let x=11;x<15;x++)t[11][x]=2; // left-center step platform
+  // Right section platforms
+  for(let x=25;x<32;x++)t[9][x]=2;  // right low platform
+  for(let x=29;x<36;x++)t[6][x]=2;  // right high platform
+  for(let x=17;x<23;x++)t[11][x]=2; // right-center step platform
+  // Gate top beam (decorative)
+  for(let x=15;x<25;x++)t[4][x]=1;
+  return t;})(),
+  enemies:[{type:'guard',x:5,y:13},{type:'guard',x:14,y:10},{type:'guard',x:28,y:13}],
   npcs:[],
   trans:[{x:0,yA:13,yB:14,to:'r3',tx:42,ty:13},{x:39,yA:13,yB:14,to:'boss1',tx:2,ty:10}],
   save:{x:35,y:13}};
@@ -568,11 +578,24 @@ RM['post_renji']={zone:'seireitei',w:45,h:17,
 RM['s2']={zone:'seireitei',w:40,h:17,
   tiles:(()=>{let w=40,h=17,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2)?1:0;}
   for(let y=0;y<h;y++){if(y!==13&&y!==14)t[y][0]=1;if(y!==13&&y!==14)t[y][w-1]=1;}
-  for(let p=0;p<5;p++){const px=6+p*7;for(let py=6;py<15;py++)t[py][px]=1;}
-  for(let x=3;x<6;x++)t[9][x]=2;for(let x=7;x<13;x++)t[7][x]=2;for(let x=14;x<20;x++)t[9][x]=2;
-  for(let x=21;x<27;x++)t[7][x]=2;for(let x=28;x<34;x++)t[9][x]=2;for(let x=35;x<38;x++)t[11][x]=2;
-  t[14][10]=3;t[14][17]=3;t[14][24]=3;return t;})(),
-  enemies:[{type:'guard',x:10,y:13},{type:'guard',x:18,y:13},{type:'guard',x:30,y:8},{type:'fly',x:25,y:4}],
+  // Inner Seireitei — ascending staircase layout with open ground corridors
+  // Open ground floor everywhere so guards can patrol
+  // Rooftop platforms (staggered ascending)
+  for(let x=3;x<10;x++)t[11][x]=2;  // left roof ledge
+  for(let x=3;x<7;x++)t[8][x]=2;    // left high rooftop
+  for(let x=11;x<19;x++)t[9][x]=2;  // center-left platform
+  for(let x=13;x<18;x++)t[6][x]=2;  // upper center platform
+  for(let x=21;x<29;x++)t[11][x]=2; // center-right step
+  for(let x=30;x<37;x++)t[9][x]=2;  // right platform
+  for(let x=32;x<37;x++)t[6][x]=2;  // upper right platform
+  // Short wall columns (not full pillars — guards can go around at ground)
+  for(let py=9;py<15;py++)t[py][10]=1;  // left column
+  for(let py=7;py<15;py++)t[py][20]=1;  // center column
+  for(let py=9;py<15;py++)t[py][29]=1;  // right column
+  // Spike/trap tiles on the ground
+  t[14][12]=3;t[14][22]=3;t[14][32]=3;
+  return t;})(),
+  enemies:[{type:'guard',x:4,y:13},{type:'guard',x:22,y:13},{type:'guard',x:35,y:13},{type:'fly',x:15,y:4}],
   npcs:[],
   trans:[{x:0,yA:13,yB:14,to:'post_renji',tx:42,ty:13},{x:39,yA:13,yB:14,to:'boss2',tx:2,ty:10}],
   save:{x:36,y:13}};
@@ -595,11 +618,27 @@ RM['victory']={zone:'seireitei',w:25,h:14,
 RM['h1']={zone:'hueco',w:50,h:17,
   tiles:(()=>{let w=50,h=17,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2)?1:0;}
   for(let y=0;y<h;y++){if(y!==13&&y!==14)t[y][0]=1;if(y!==13&&y!==14)t[y][w-1]=1;}
-  for(let x=10;x<15;x++)t[h-2][x]=6;
-  for(let x=25;x<32;x++){t[h-2][x]=0;t[h-1][x]=7;}
-  for(let x=8;x<12;x++)t[11][x]=2;for(let x=18;x<24;x++)t[10][x]=2;for(let x=35;x<40;x++)t[9][x]=2;
-  for(let py=8;py<15;py++){t[py][20]=1;t[py][38]=1;}return t;})(),
-  enemies:[{type:'hollow',x:12,y:13},{type:'adjuchas',x:28,y:13},{type:'menos',x:42,y:10}],
+  // Hueco Mundo desert — dune-top platforms over open sandy ground
+  // Left dune formation
+  for(let x=5;x<14;x++)t[11][x]=2;  // left dune crest
+  for(let x=6;x<13;x++)t[12][x]=2;  // dune base layer
+  // Center-left bone pillar walls (open ground between them)
+  for(let py=8;py<15;py++){t[py][15]=1;t[py][16]=1;}
+  // Center dune (higher — harder to reach)
+  for(let x=18;x<28;x++)t[10][x]=2; // center dune crest
+  for(let x=19;x<27;x++)t[11][x]=2; // second layer
+  // Sand pits (hazardous) — positioned away from enemy spawns
+  for(let x=28;x<32;x++){t[h-2][x]=0;t[h-1][x]=7;}
+  // Center-right bone pillar walls
+  for(let py=7;py<15;py++){t[py][33]=1;t[py][34]=1;}
+  // Right dune
+  for(let x=36;x<44;x++)t[11][x]=2; // right dune crest
+  for(let x=37;x<43;x++)t[12][x]=2; // dune base
+  // Quicksand visual at dune bases (non-damaging)
+  for(let x=5;x<14;x++)t[h-2][x]=6;
+  for(let x=36;x<44;x++)t[h-2][x]=6;
+  return t;})(),
+  enemies:[{type:'hollow',x:7,y:10},{type:'adjuchas',x:22,y:9},{type:'menos',x:39,y:9}],
   npcs:[],
   trans:[{x:0,yA:13,yB:14,to:'victory',tx:22,ty:10},{x:49,yA:13,yB:14,to:'h2',tx:2,ty:13}],
   save:{x:5,y:13}};
@@ -607,24 +646,51 @@ RM['h1']={zone:'hueco',w:50,h:17,
 RM['h2']={zone:'hueco',w:45,h:20,
   tiles:(()=>{let w=45,h=20,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2)?1:0;}
   for(let y=0;y<h;y++){if(y!==13&&y!==14)t[y][0]=1;if(y!==16&&y!==17)t[y][w-1]=1;}
-  for(let x=5;x<10;x++)t[12][x]=2;
-  for(let x=15;x<20;x++){t[h-2][x]=0;t[h-3][x]=0;t[h-4][x]=0;t[h-1][x]=7;}
-  for(let x=18;x<25;x++)t[h-2][x]=1;
-  for(let x=22;x<28;x++)t[17][x]=2;for(let x=30;x<w;x++)t[h-2][x]=1;
-  for(let x=32;x<38;x++)t[15][x]=2;return t;})(),
-  enemies:[{type:'adjuchas',x:24,y:16},{type:'adjuchas',x:35,y:14},{type:'menos',x:40,y:15}],
-  npcs:[{type:'nel',x:7,y:11}],
+  // Nel's valley — layered terrain, no enemies near left entrance or pit edges
+  // Left ledge (Nel's rest area, safe zone)
+  for(let x=3;x<10;x++)t[14][x]=2;
+  for(let x=3;x<7;x++)t[11][x]=2;  // upper Nel ledge
+  // Gap between Nel area and middle terrain (open chasm)
+  // Central raised bone-terrain mound (solid, not a pit hazard)
+  for(let x=11;x<17;x++)t[h-2][x]=1;  // raised ground left block
+  for(let x=12;x<16;x++)t[h-3][x]=1;  // second layer
+  // Sand pit (clearly separated from enemy spawns)
+  for(let x=17;x<21;x++){t[h-2][x]=0;t[h-1][x]=7;}
+  // Central platform above pit (enemies land here)
+  for(let x=21;x<30;x++)t[14][x]=2;
+  for(let x=22;x<29;x++)t[11][x]=2;  // upper central platform
+  // Wall column separating sections
+  for(let py=9;py<18;py++)t[py][30]=1;
+  // Right section — staggered descent toward exit
+  for(let x=31;x<38;x++)t[12][x]=2;
+  for(let x=37;x<43;x++)t[15][x]=2;
+  // Right section solid ground near exit
+  for(let x=31;x<w;x++)t[h-2][x]=1;
+  return t;})(),
+  enemies:[{type:'adjuchas',x:23,y:13},{type:'adjuchas',x:33,y:11},{type:'menos',x:39,y:14}],
+  npcs:[{type:'nel',x:4,y:13}],
   trans:[{x:0,yA:13,yB:14,to:'h1',tx:47,ty:13},{x:44,yA:16,yB:17,to:'ln1',tx:2,ty:13}],
-  save:{x:24,y:16}};
+  save:{x:4,y:13}};
 
 RM['ln1']={zone:'lasnoches',w:50,h:17,
   tiles:(()=>{let w=50,h=17,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2)?1:0;}
   for(let y=0;y<h;y++){if(y!==13&&y!==14)t[y][0]=1;if(y!==13&&y!==14)t[y][w-1]=1;}
-  for(let p=0;p<6;p++){const px=6+p*7;for(let py=4;py<15;py++)t[py][px]=1;}
-  for(let x=3;x<6;x++)t[8][x]=2;for(let x=7;x<13;x++)t[6][x]=2;for(let x=14;x<20;x++)t[8][x]=2;
-  for(let x=21;x<27;x++)t[6][x]=2;for(let x=28;x<34;x++)t[8][x]=2;for(let x=35;x<41;x++)t[6][x]=2;
-  for(let x=42;x<48;x++)t[10][x]=2;return t;})(),
-  enemies:[{type:'arrancar',x:10,y:13},{type:'arrancar',x:24,y:13},{type:'arrancar',x:38,y:5},{type:'adjuchas',x:45,y:9}],
+  // Las Noches — paired pillar columns with WIDE open corridors between them
+  // Pillar pairs leave 10+ tile gaps so arrancar can patrol freely between them
+  for(let py=3;py<15;py++){t[py][11]=1;t[py][12]=1;}  // first pillar pair (x=11-12)
+  for(let py=3;py<15;py++){t[py][24]=1;t[py][25]=1;}  // second pillar pair (x=24-25)
+  for(let py=3;py<15;py++){t[py][37]=1;t[py][38]=1;}  // third pillar pair (x=37-38)
+  // Platforms between pillars at varying heights
+  for(let x=3;x<11;x++)t[8][x]=2;    // left section platform
+  for(let x=3;x<8;x++)t[5][x]=2;     // left high platform
+  for(let x=13;x<24;x++)t[9][x]=2;   // center-left wide platform (arrancar patrols here)
+  for(let x=15;x<22;x++)t[6][x]=2;   // upper center platform
+  for(let x=26;x<37;x++)t[9][x]=2;   // center-right wide platform
+  for(let x=28;x<35;x++)t[6][x]=2;   // upper right platform
+  for(let x=39;x<47;x++)t[10][x]=2;  // far-right platform
+  for(let x=41;x<47;x++)t[7][x]=2;   // far-right upper platform
+  return t;})(),
+  enemies:[{type:'arrancar',x:4,y:7},{type:'arrancar',x:16,y:8},{type:'arrancar',x:28,y:8},{type:'adjuchas',x:41,y:9}],
   npcs:[{type:'urahara4',x:4,y:13}],
   trans:[{x:0,yA:13,yB:14,to:'h2',tx:42,ty:16},{x:49,yA:13,yB:14,to:'boss3',tx:2,ty:10}],
   save:{x:44,y:13}};
@@ -798,7 +864,8 @@ const P={
     // ── Cero
     if(IN.pressed('cero')&&this.hasCero&&this.sl>=CC&&this.aT<=0&&this.dT<=0&&this.hlT<=0&&!this.charging){
       this.sl-=CC;AU.play('cero');shk=6;fls=4;
-      projs.push({x:this.x+this.w/2+this.fc*15,y:this.y+this.h/2,vx:this.fc*10,vy:0,w:25,h:25,dmg:Math.floor(12*pwrMult),life:35,fc:this.fc,cero:true});
+      // Cero: faster and longer range than Getsuga (focused beam)
+      projs.push({x:this.x+this.w/2+this.fc*18,y:this.y+this.h/2,vx:this.fc*14,vy:0,w:22,h:22,dmg:Math.floor(12*pwrMult),life:60,fc:this.fc,cero:true});
     }
 
     // ── Heal (F key)
@@ -1092,7 +1159,7 @@ class En{
 
     if(type==='hollow'){this.hp=this.mhp=3;this.spd=0.8;this.coins=8;this.alertRange=140;this.chaseRange=200;this.w=30;this.h=30;}
     else if(type==='fly'){this.hp=this.mhp=2;this.w=24;this.h=20;this.spd=1.4;this.fly=true;this.flyY=this.y;this.coins=6;this.alertRange=160;this.chaseRange=220;}
-    else if(type==='guard'){this.hp=this.mhp=5;this.w=24;this.h=38;this.spd=0.9;this.atkR=52;this.coins=12;this.alertRange=150;this.chaseRange=210;}
+    else if(type==='guard'){this.hp=this.mhp=8;this.w=24;this.h=38;this.spd=0.9;this.atkR=52;this.coins=12;this.alertRange=150;this.chaseRange=210;}
     else if(type==='menos'){this.hp=this.mhp=12;this.w=44;this.h=64;this.spd=0.25;this.dmg=2;this.coins=25;this.alertRange=200;this.chaseRange=280;}
     else if(type==='adjuchas'){this.hp=this.mhp=8;this.w=34;this.h=30;this.spd=1.4;this.dmg=2;this.coins=18;this.alertRange=160;this.chaseRange=230;}
     else if(type==='arrancar'){this.hp=this.mhp=7;this.w=24;this.h=40;this.spd=1.0;this.atkR=52;this.coins=15;this.alertRange=155;this.chaseRange=215;}
@@ -1274,6 +1341,8 @@ class En{
         if(!this.canWalk(room,this.fc)){this.fc*=-1;this.st=0;}
         this.st++;if(this.st>100+~~(Math.sin(this.at*.006)*30)){this.fc*=-1;this.st=0;}
         this.vx=this.canWalk(room,this.fc)?this.fc*this.spd*0.6*sm:0;
+        // Stuck detection: if unable to move for too long, jump to get unstuck
+        if(this.vx===0&&this.gnd){this.stuckT=(this.stuckT||0)+1;if(this.stuckT>45&&this.jcd<=0){this.vy=-7;this.jcd=50;this.stuckT=0;}}else{this.stuckT=0;}
       }
     }
     this.vy+=G;if(this.vy>MF)this.vy=MF;
@@ -2462,48 +2531,56 @@ function dSave(c,sv,cx,cy){
 
 // ─────────────────────────────── HUD ──────────────────────────────────────────
 function dHUD(c){
+  // ── Left corner panel (scaled 1.45x for readability)
+  c.save();c.scale(1.45,1.45);
+
   // HP orbs
   for(let i=0;i<P.mHP;i++){
-    const hx=20+i*22,hy=18;
-    c.fillStyle='#333';c.strokeStyle='#555';c.lineWidth=2;
-    c.beginPath();c.arc(hx+8,hy+8,8,0,Math.PI*2);c.fill();c.stroke();
+    const hx=12+i*20,hy=10;
+    c.fillStyle='#1a1a1a';c.strokeStyle='#444';c.lineWidth=1.5;
+    c.beginPath();c.arc(hx+9,hy+9,9,0,Math.PI*2);c.fill();c.stroke();
     if(i<P.hp){
-      c.fillStyle='#55dd99';c.shadowColor='#55ffaa';c.shadowBlur=5;
-      c.beginPath();c.arc(hx+8,hy+8,6,0,Math.PI*2);c.fill();c.shadowBlur=0;
+      c.fillStyle='#55dd99';c.shadowColor='#55ffaa';c.shadowBlur=6;
+      c.beginPath();c.arc(hx+9,hy+9,7,0,Math.PI*2);c.fill();c.shadowBlur=0;
+      c.fillStyle='#aaffcc';c.beginPath();c.arc(hx+6,hy+6,3,0,Math.PI*2);c.fill();
     }
   }
 
   // Reiatsu bar
-  c.fillStyle='#1a1a30';c.fillRect(20,42,110,6);c.strokeStyle='#3a3a66';c.lineWidth=1;c.strokeRect(20,42,110,6);
+  c.fillStyle='#1a1a30';c.fillRect(12,34,130,9);c.strokeStyle='#3a3a66';c.lineWidth=1;c.strokeRect(12,34,130,9);
   const sp_=P.sl/P.mSl;
   if(sp_>0){
     const barColor=P.charging?'#66aaff':'#5599ff';
-    c.fillStyle=barColor;c.fillRect(21,43,108*sp_,4);
-    if(P.charging){c.shadowColor='#66aaff';c.shadowBlur=8;c.fillRect(21,43,108*sp_,4);c.shadowBlur=0;}
+    c.fillStyle=barColor;c.fillRect(13,35,128*sp_,7);
+    if(P.charging){c.shadowColor='#66aaff';c.shadowBlur=8;c.fillRect(13,35,128*sp_,7);c.shadowBlur=0;}
   }
-  c.fillStyle='#7799bb';c.font='7px monospace';c.textAlign='left';
-  c.fillText(P.charging?'CHARGING! [C]':'REIATSU',20,40);
+  c.fillStyle='#8899cc';c.font='8px monospace';c.textAlign='left';
+  c.fillText(P.charging?'CHARGING! [C]':'REIATSU',12,32);
 
   // Bankai bar
   if(P.hasBankai){
-    c.fillStyle='#1a0a0a';c.fillRect(20,52,55,4);c.strokeStyle='#663333';c.strokeRect(20,52,55,4);
+    c.fillStyle='#200808';c.fillRect(12,48,72,7);c.strokeStyle='#663333';c.lineWidth=1;c.strokeRect(12,48,72,7);
     const bk=P.bk/100;
-    if(bk>0){c.fillStyle=P.bkActive?'#ff4400':'#cc3333';c.fillRect(21,53,53*bk,2);}
-    c.fillStyle='#aa6644';c.font='6px monospace';c.fillText(P.bkActive?'BANKAI!':'BNK[B]',20,51);
+    if(bk>0){c.fillStyle=P.bkActive?'#ff5500':'#cc3333';if(P.bkActive){c.shadowColor='#ff4400';c.shadowBlur=6;}c.fillRect(13,49,70*bk,5);c.shadowBlur=0;}
+    c.fillStyle='#cc7755';c.font='8px monospace';c.fillText(P.bkActive?'BANKAI! ▶':'BNK [B]',12,46);
   }
 
   // Hollow bar
   if(P.hasHollow){
-    c.fillStyle='#1a1a1a';c.fillRect(78,52,52,4);c.strokeStyle='#666';c.strokeRect(78,52,52,4);
+    const bkOffset=P.hasBankai?0:0;
+    c.fillStyle='#181818';c.fillRect(88+bkOffset,48,58,7);c.strokeStyle='#555';c.lineWidth=1;c.strokeRect(88+bkOffset,48,58,7);
     const hm=P.hm/100;
-    if(hm>0){c.fillStyle=P.hmActive?'#fff':'#aaa';c.fillRect(79,53,50*hm,2);}
-    c.fillStyle='#888';c.font='6px monospace';c.fillText(P.hmActive?'HOLLOW!':'HLW[H]',78,51);
+    if(hm>0){c.fillStyle=P.hmActive?'#ffffff':'#aaaaaa';if(P.hmActive){c.shadowColor='#fff';c.shadowBlur=6;}c.fillRect(89+bkOffset,49,56*hm,5);c.shadowBlur=0;}
+    c.fillStyle='#999';c.font='8px monospace';c.fillText(P.hmActive?'HOLLOW! ▶':'HLW [H]',88+bkOffset,46);
   }
 
-  // Weapon mod indicators
-  let modY=60;
-  if(weaponMods.frozenBlade.active){c.fillStyle='#88ccff';c.font='7px monospace';c.fillText('❄ FROZEN BLADE',20,modY);modY+=9;}
-  if(weaponMods.whipBlade.active){c.fillStyle='#ffaa44';c.font='7px monospace';c.fillText('⛓ WHIP REACH',20,modY);}
+  // Weapon mod indicators (inside scale)
+  let modY=62;
+  if(P.hasBankai||P.hasHollow)modY=62;
+  if(weaponMods.frozenBlade.active){c.fillStyle='#88ccff';c.font='7px monospace';c.fillText('❄ FROZEN',12,modY);modY+=10;}
+  if(weaponMods.whipBlade.active){c.fillStyle='#ffaa44';c.font='7px monospace';c.fillText('⛓ WHIP',12,modY);}
+
+  c.restore();
 
   // Coins
   c.fillStyle='#ffdd33';c.font='13px monospace';c.textAlign='right';c.fillText(`${P.cn}`,C.width-20,28);
