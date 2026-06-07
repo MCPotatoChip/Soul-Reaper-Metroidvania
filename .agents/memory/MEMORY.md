@@ -1,1 +1,4 @@
 - [Vite inline script transform](vite-inline-script.md) — inline `<script>` in Vite HTML gets esbuild-transformed; move game/legacy JS to `public/` to serve it raw.
+- [chest system](chest-system.md) — openChests Set + dChests/checkChests added; room.chests pixel coords; persisted in save/load; rewards: coins/hp/sl.
+- [dTile zone textures](dTile-zones.md) — dTile now takes tx,ty tile-grid coords for stable position hash; zone-specific wall patterns (rukon=stone+moss, seireitei=ceramic+blue, hueco=bone, lasnoches=marble).
+- [secret alcoves design](secret-alcoves.md) — breakable-wall alcoves in r1 (no ability), r3 (dash parkour, pit gap at x=38-39), s1 (wall-jump to upper-left, y=3-5).

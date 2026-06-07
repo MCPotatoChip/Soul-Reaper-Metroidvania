@@ -500,10 +500,17 @@ RM['r1']={zone:'rukon',w:30,h:17,
   tiles:(()=>{let w=30,h=17,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2||x===0)?1:0;}
   for(let x=8;x<12;x++)t[11][x]=2;for(let x=16;x<20;x++)t[9][x]=2;for(let x=22;x<26;x++)t[11][x]=2;
   t[14][10]=3;t[14][11]=3;
-  for(let y=1;y<h-2;y++)if(y!==13&&y!==14)t[y][w-1]=1;return t;})(),
+  for(let y=1;y<h-2;y++)if(y!==13&&y!==14)t[y][w-1]=1;
+  // Secret alcove (upper-left corner, behind breakable wall — no ability required)
+  for(let y=1;y<=8;y++)t[y][5]=1;  // alcove right wall
+  t[6][5]=5;t[7][5]=5;t[8][5]=5;   // breakable entrance (shoot with Getsuga to open)
+  for(let x=1;x<=4;x++)t[9][x]=2;  // alcove floor platform
+  return t;})(),
   enemies:[{type:'hollow',x:12,y:12},{type:'hollow',x:20,y:12},{type:'fly',x:16,y:7}],
   npcs:[{type:'urahara',x:6,y:13}],
-  trans:[{x:29,yA:13,yB:14,to:'r2',tx:2,ty:15}],save:null};
+  trans:[{x:29,yA:13,yB:14,to:'r2',tx:2,ty:15}],
+  chests:[{id:'r1_c1',x:2*T,y:8*T,reward:'coins',amount:60}],
+  save:null};
 
 RM['r2']={zone:'rukon',w:40,h:20,
   tiles:(()=>{let w=40,h=20,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2)?1:0;}
@@ -520,6 +527,7 @@ RM['r2']={zone:'rukon',w:40,h:20,
   enemies:[{type:'hollow',x:9,y:12},{type:'fly',x:22,y:10}],
   npcs:[{type:'rukia',x:17,y:12}],
   trans:[{x:0,yA:15,yB:16,to:'r1',tx:27,ty:13},{x:39,yA:3,yB:4,to:'r3',tx:2,ty:13}],
+  chests:[{id:'r2_c1',x:27*T,y:3*T,reward:'coins',amount:60}],
   save:{x:16,y:12}};
 
 RM['r3']={zone:'rukon',w:45,h:17,
@@ -529,10 +537,17 @@ RM['r3']={zone:'rukon',w:45,h:17,
   for(let x=15;x<20;x++){t[h-2][x]=0;t[h-3][x]=0;}for(let x=15;x<20;x++)t[h-3][x]=3;
   for(let x=25;x<32;x++){t[h-2][x]=0;t[h-3][x]=0;}for(let x=25;x<32;x++)t[h-3][x]=3;
   for(let x=20;x<25;x++)t[13][x]=1;
-  for(let x=32;x<w;x++)t[h-2][x]=1;for(let x=36;x<40;x++)t[10][x]=2;return t;})(),
+  for(let x=32;x<w;x++)t[h-2][x]=1;for(let x=36;x<40;x++)t[10][x]=2;
+  // Dash-challenge alcove (upper-right, requires Shunpo/dash to cross the 3-tile pit gap)
+  for(let y=1;y<=9;y++)t[y][40]=1;   // alcove left wall
+  t[7][40]=5;t[8][40]=5;t[9][40]=5;  // breakable entrance (shoot from the y=10 platform)
+  t[h-2][38]=0;t[h-2][39]=0;         // pit gap — fall risk without dash
+  for(let x=41;x<44;x++)t[10][x]=2;  // alcove floor platform (land here after dashing)
+  return t;})(),
   enemies:[{type:'hollow',x:22,y:12},{type:'fly',x:35,y:8},{type:'hollow',x:38,y:13}],
   npcs:[{type:'yoruichi',x:7,y:11}],
   trans:[{x:0,yA:13,yB:14,to:'r2',tx:37,ty:3},{x:44,yA:13,yB:14,to:'s1',tx:2,ty:13}],
+  chests:[{id:'r3_c1',x:41*T,y:9*T,reward:'coins',amount:80}],
   save:{x:34,y:13}};
 
 RM['s1']={zone:'seireitei',w:40,h:17,
@@ -551,10 +566,15 @@ RM['s1']={zone:'seireitei',w:40,h:17,
   for(let x=17;x<23;x++)t[11][x]=2; // right-center step platform
   // Gate top beam (decorative)
   for(let x=15;x<25;x++)t[4][x]=1;
+  // Wall-jump secret alcove (upper-left, requires wall-jump to reach y=3-5 level)
+  for(let y=1;y<=5;y++)t[y][5]=1;   // alcove right wall (top section only)
+  t[3][5]=5;t[4][5]=5;t[5][5]=5;   // breakable entrance (need wall-jump against x=0 to reach)
+  for(let x=1;x<=4;x++)t[7][x]=2;  // alcove floor platform
   return t;})(),
   enemies:[{type:'guard',x:5,y:13},{type:'guard',x:14,y:10},{type:'guard',x:28,y:13}],
   npcs:[],
   trans:[{x:0,yA:13,yB:14,to:'r3',tx:42,ty:13},{x:39,yA:13,yB:14,to:'boss1',tx:2,ty:10}],
+  chests:[{id:'s1_c1',x:2*T,y:6*T,reward:'sl',amount:20}],
   save:{x:35,y:13}};
 
 RM['boss1']={zone:'seireitei',w:28,h:14,
@@ -585,6 +605,7 @@ RM['s2']={zone:'seireitei',w:40,h:17,
   for(let x=3;x<7;x++)t[8][x]=2;    // left high rooftop
   for(let x=11;x<19;x++)t[9][x]=2;  // center-left platform
   for(let x=13;x<18;x++)t[6][x]=2;  // upper center platform
+  for(let x=19;x<32;x++)t[6][x]=2;  // ALTERNATE HIGH ROAD — bridges center to right upper path
   for(let x=21;x<29;x++)t[11][x]=2; // center-right step
   for(let x=30;x<37;x++)t[9][x]=2;  // right platform
   for(let x=32;x<37;x++)t[6][x]=2;  // upper right platform
@@ -598,6 +619,7 @@ RM['s2']={zone:'seireitei',w:40,h:17,
   enemies:[{type:'guard',x:4,y:13},{type:'guard',x:22,y:13},{type:'guard',x:35,y:13},{type:'fly',x:15,y:4}],
   npcs:[],
   trans:[{x:0,yA:13,yB:14,to:'post_renji',tx:42,ty:13},{x:39,yA:13,yB:14,to:'boss2',tx:2,ty:10}],
+  chests:[{id:'s2_c1',x:35*T,y:5*T,reward:'hp',amount:1}],
   save:{x:36,y:13}};
 
 RM['boss2']={zone:'seireitei',w:30,h:14,
@@ -641,6 +663,7 @@ RM['h1']={zone:'hueco',w:50,h:17,
   enemies:[{type:'hollow',x:7,y:10},{type:'adjuchas',x:22,y:9},{type:'menos',x:39,y:9}],
   npcs:[],
   trans:[{x:0,yA:13,yB:14,to:'victory',tx:22,ty:10},{x:49,yA:13,yB:14,to:'h2',tx:2,ty:13}],
+  chests:[{id:'h1_c1',x:22*T,y:9*T,reward:'coins',amount:70}],
   save:{x:5,y:13}};
 
 RM['h2']={zone:'hueco',w:45,h:20,
@@ -670,6 +693,7 @@ RM['h2']={zone:'hueco',w:45,h:20,
   enemies:[{type:'adjuchas',x:23,y:13},{type:'adjuchas',x:33,y:11},{type:'menos',x:39,y:14}],
   npcs:[{type:'nel',x:4,y:13}],
   trans:[{x:0,yA:13,yB:14,to:'h1',tx:47,ty:13},{x:44,yA:16,yB:17,to:'ln1',tx:2,ty:13}],
+  chests:[{id:'h2_c1',x:24*T,y:10*T,reward:'coins',amount:60}],
   save:{x:4,y:13}};
 
 RM['ln1']={zone:'lasnoches',w:50,h:17,
@@ -693,6 +717,7 @@ RM['ln1']={zone:'lasnoches',w:50,h:17,
   enemies:[{type:'arrancar',x:4,y:7},{type:'arrancar',x:16,y:8},{type:'arrancar',x:28,y:8},{type:'adjuchas',x:41,y:9}],
   npcs:[{type:'urahara4',x:4,y:13}],
   trans:[{x:0,yA:13,yB:14,to:'h2',tx:42,ty:16},{x:49,yA:13,yB:14,to:'boss3',tx:2,ty:10}],
+  chests:[{id:'ln1_c1',x:43*T,y:6*T,reward:'coins',amount:100}],
   save:{x:44,y:13}};
 
 RM['boss3']={zone:'lasnoches',w:32,h:14,
@@ -1437,7 +1462,8 @@ class En{
           const r={left:tx*T,top:ty*T,right:(tx+1)*T,bottom:(ty+1)*T};
           if(rO(b,r)){
             const cx=this.x+this.w/2, rcx=r.left+T/2;
-            if(cx<rcx){this.x=r.left-this.w;} else {this.x=r.right;}
+            const pushLeft=this.vx<0||(this.vx===0&&cx<rcx);
+            if(pushLeft){this.x=r.left-this.w-1;}else{this.x=r.right+1;}
             this.vx=0;b=this.bounds();
           }
         }
@@ -2299,6 +2325,7 @@ class NC{
 // ─────────────────────────────── GAME STATE ───────────────────────────────────
 let cR=null,cID='r1',ens=[],npcs=[],boss=null;
 let dB=new Set(),vis=new Set();
+let openChests=new Set();
 let dlgA=false,dlgN=null,dlgI=0,dlgT=0;
 
 function openBossDoor(id){
@@ -2349,7 +2376,7 @@ function doTrans(room,tx,ty){
 
 function saveGame(){
   localStorage.setItem('bsave',JSON.stringify({
-    r:cID,x:P.x,y:P.y,cn:P.cn,items:P.items,dB:[...dB],vis:[...vis],mHP:P.mHP,
+    r:cID,x:P.x,y:P.y,cn:P.cn,items:P.items,dB:[...dB],vis:[...vis],mHP:P.mHP,openChests:[...openChests],
     hasDash:P.hasDash,hasWJ:P.hasWJ,hasGet:P.hasGet,hasCero:P.hasCero,
     hasDJ:P.hasDJ,hasBankai:P.hasBankai,hasHollow:P.hasHollow
   }));
@@ -2363,7 +2390,7 @@ function loadSv(){
     P.cn=d.cn||0;P.items=d.items||[];P.mHP=d.mHP||5;
     P.hasDash=d.hasDash||false;P.hasWJ=d.hasWJ||false;P.hasGet=d.hasGet||false;
     P.hasCero=d.hasCero||false;P.hasDJ=d.hasDJ||false;P.hasBankai=d.hasBankai||false;P.hasHollow=d.hasHollow||false;
-    dB=new Set(d.dB||[]);vis=new Set(d.vis||[]);
+    dB=new Set(d.dB||[]);vis=new Set(d.vis||[]);openChests=new Set(d.openChests||[]);
     P.x=d.x;P.y=d.y;P.sR=d.r;P.sX=d.x;P.sY=d.y;
     loadRoom(d.r);P.reset();return true;
   }catch(e){return false;}
@@ -2446,15 +2473,43 @@ function drawMap(){
 }
 
 // ─────────────────────────────── TILE DRAWING ─────────────────────────────────
-function dTile(c,tl,x,y,zone){
+function dTile(c,tl,x,y,zone,tx,ty){
   const z=ZN[zone]||ZN.rukon;
   if(tl===1){
+    const h=((tx||0)*137+(ty||0)*311)%1000;
     c.fillStyle=z.wc;c.fillRect(x,y,T,T);
     c.fillStyle=z.wi;c.fillRect(x+1,y+1,T-2,T-2);
-    if((x+y)%97<30){c.fillStyle=z.wc;c.fillRect(x+4,y+4,8,8);}
+    if(zone==='rukon'){
+      // Stone blocks: mortar seams + moss patches
+      if(h%4===0){c.fillStyle='#2a3520';c.fillRect(x+1,y+T/2-1,T-2,2);}
+      if(h%5<2){c.fillStyle='#2d3f25';c.fillRect(x+T/2-1,y+1,2,T-2);}
+      if(h%9===0){c.fillStyle='#3a5a28';c.fillRect(x+3,y+T-9,5,5);c.fillRect(x+T-9,y+4,5,4);}
+      if(h%13===0){c.fillStyle='#1a2a18';c.fillRect(x+T/2,y+3,3,11);}
+    } else if(zone==='seireitei'){
+      // White ceramic with blue tile lines and ornamental accents
+      c.fillStyle='#5572b8';c.fillRect(x,y,T,1);c.fillRect(x,y,1,T);
+      if(h%3===0){c.fillStyle='#4868a4';c.fillRect(x+5,y+5,T-10,4);c.fillRect(x+5,y+T-9,T-10,4);}
+      if(h%5===0){c.fillStyle='#99aadc';c.fillRect(x+T/2-4,y+2,8,3);}
+      if(h%7===0){c.fillStyle='#3a5896';c.fillRect(x+2,y+T/2-1,4,3);c.fillRect(x+T-6,y+T/2-1,4,3);}
+    } else if(zone==='hueco'){
+      // Bone-white segments with cavity detail
+      c.fillStyle='#787870';c.fillRect(x+2,y+2,T-4,T-4);
+      if(h%3===0){c.fillStyle='#545448';c.fillRect(x+3,y+T/2-1,T-6,3);}
+      if(h%7===1){c.fillStyle='#666658';c.fillRect(x+T/2-2,y+3,4,T-6);}
+      if(h%11===0){c.fillStyle='#484838';c.fillRect(x+T-8,y+T-8,5,5);}
+      if(h%17===0){c.fillStyle='#888878';c.fillRect(x+4,y+4,5,5);}
+    } else if(zone==='lasnoches'){
+      // Dark marble with lighter veins
+      if(h%4===0){c.fillStyle='#585868';c.fillRect(x+2,y+3,3,T-6);}
+      if(h%3===0){c.fillStyle='#5e5e72';c.fillRect(x+6,y+T/2,T-8,2);}
+      if(h%7===0){c.fillStyle='#666678';c.fillRect(x+T-7,y+2,4,T-4);}
+      if(h%9===0){c.fillStyle='#424258';c.fillRect(x+3,y+3,T-6,T-6);}
+    }
     c.fillStyle=z.wh;c.fillRect(x,y,T,1);c.fillRect(x,y,1,T);
   } else if(tl===2){
     c.fillStyle=z.pc;c.fillRect(x,y,T,6);c.fillStyle=z.pt;c.fillRect(x,y,T,2);
+    if(zone==='seireitei'){c.fillStyle='#6880c8';c.fillRect(x,y,4,6);c.fillRect(x+T-4,y,4,6);}
+    else if(zone==='hueco'){c.fillStyle='#887858';c.fillRect(x,y+2,T,2);}
   } else if(tl===3){
     c.fillStyle='#996666';
     for(let i=0;i<4;i++){const sx=x+i*8;c.beginPath();c.moveTo(sx,y+T);c.lineTo(sx+4,y+8);c.lineTo(sx+8,y+T);c.fill();}
@@ -2472,6 +2527,49 @@ function dTile(c,tl,x,y,zone){
     c.beginPath();c.moveTo(x+4,y+T-8);c.lineTo(x+8,y+T-24);c.lineTo(x+12,y+T-8);c.fill();
     c.beginPath();c.moveTo(x+14,y+T-8);c.lineTo(x+18,y+T-24);c.lineTo(x+22,y+T-8);c.fill();
     c.beginPath();c.moveTo(x+24,y+T-8);c.lineTo(x+28,y+T-24);c.lineTo(x+32,y+T-8);c.fill();
+  }
+}
+
+// ─────────────────────────────── CHEST SYSTEM ─────────────────────────────────
+function dChests(c,cx,cy){
+  if(!cR||!cR.chests)return;
+  const pulse=0.4+0.3*Math.sin(fr*0.12);
+  for(const ch of cR.chests){
+    if(openChests.has(ch.id))continue;
+    const sx=ch.x-cx,sy=ch.y-cy;
+    c.save();
+    // Glow halo
+    c.globalAlpha=pulse*0.45;c.fillStyle='#ffdd44';c.beginPath();c.arc(sx+11,sy+9,16,0,Math.PI*2);c.fill();
+    c.globalAlpha=1;c.shadowColor='#ffdd44';c.shadowBlur=8+pulse*10;
+    // Chest body
+    c.fillStyle='#7a5520';c.fillRect(sx,sy+6,22,12);
+    // Lid
+    c.fillStyle='#a07030';c.fillRect(sx,sy+1,22,7);
+    // Metal bands
+    c.fillStyle='#c8a030';c.fillRect(sx,sy+4,22,2);c.fillRect(sx,sy+10,22,2);
+    // Keyhole
+    c.fillStyle='#ffdd44';c.fillRect(sx+9,sy+7,4,4);c.fillStyle='#cc8800';c.fillRect(sx+10,sy+8,2,2);
+    // Icon above chest
+    c.shadowBlur=0;c.fillStyle='#ffe866';c.font='bold 11px monospace';c.textAlign='center';
+    const icon=ch.reward==='hp'?'♥':ch.reward==='sl'?'★':'¥';
+    c.fillText(icon,sx+11,sy-2);
+    c.restore();
+  }
+}
+function checkChests(){
+  if(!cR||!cR.chests)return;
+  for(const ch of cR.chests){
+    if(openChests.has(ch.id))continue;
+    const px=P.x+P.w/2,py=P.y+P.h/2;
+    if(Math.abs(px-(ch.x+11))<24&&Math.abs(py-(ch.y+9))<24){
+      openChests.add(ch.id);
+      sp(ch.x+11,ch.y+9,20,'#ffdd44',5,30,3,'sp');
+      sp(ch.x+11,ch.y+9,12,'#fff',3,22,2,'sp');
+      if(ch.reward==='coins'){P.cn+=ch.amount;notify(`Found ${ch.amount} Kon Coins! ¥`);}
+      else if(ch.reward==='hp'){P.mHP+=ch.amount;P.hp=Math.min(P.hp+ch.amount,P.mHP);notify('Max HP +1! ♥');}
+      else if(ch.reward==='sl'){P.mSl+=ch.amount;P.sl=Math.min(P.sl+ch.amount,P.mSl);notify('Max Reiatsu +20! ★');}
+      AU.play('coin');
+    }
   }
 }
 
@@ -2705,6 +2803,7 @@ function update(){
   upPr(cR);upBP(cR);
   for(let i=pts.length-1;i>=0;i--)if(!pts[i].update())pts.splice(i,1);
   
+  checkChests();
   // Spike Collision
   if(fr%10===0){
     const cx=P.x+P.w/2,cy=P.y+P.h-2,tx=~~(cx/T),ty=~~(cy/T);
@@ -2730,8 +2829,8 @@ function render(){
   dBG(c,zone);
   const stx=Math.max(0,~~(cx/T)),etx=Math.min(cR.w,Math.ceil((cx+C.width)/T)+1);
   const sty=Math.max(0,~~(cy/T)),ety=Math.min(cR.h,Math.ceil((cy+C.height)/T)+1);
-  for(let y=sty;y<ety;y++)for(let x=stx;x<etx;x++)if(cR.tiles[y]&&cR.tiles[y][x])dTile(c,cR.tiles[y][x],x*T-cx,y*T-cy,zone);
-  dSave(c,cR.save,cx,cy);
+  for(let y=sty;y<ety;y++)for(let x=stx;x<etx;x++)if(cR.tiles[y]&&cR.tiles[y][x])dTile(c,cR.tiles[y][x],x*T-cx,y*T-cy,zone,x,y);
+  dSave(c,cR.save,cx,cy);dChests(c,cx,cy);
   for(const n of npcs)n.draw(c,cx,cy);
   for(const e of ens)if(e.hp>0)e.draw(c,cx,cy);
   if(boss)boss.draw(c,cx,cy);
