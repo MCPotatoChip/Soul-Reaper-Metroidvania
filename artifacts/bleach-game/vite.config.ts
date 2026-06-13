@@ -1,6 +1,5 @@
 import { defineConfig } from "vite";
 import path from "path";
-import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 
 export default defineConfig(async () => {
   const rawPort = process.env.PORT || "5173";
@@ -20,16 +19,19 @@ export default defineConfig(async () => {
     return process.env.BASE_PATH || "/";
   };
 
-  // 1. Initialize static base plugins
-  const plugins = [runtimeErrorOverlay()];
+  // 1. Initialize an empty plugins array
+  const plugins = [];
 
-  // 2. Perform safe async imports for Replit dev modules inside the config evaluation phase
+  // 2. Dynamic Import Block: Only load Replit-specific plugins when in a local Replit dev environment
   if (process.env.NODE_ENV !== "production" && process.env.REPL_ID !== undefined) {
     try {
+      // Safely import the error overlay inside the conditional check
+      const runtimeErrorOverlay = await import("@replit/vite-plugin-runtime-error-modal").then(m => m.default || m);
       const { cartographer } = await import("@replit/vite-plugin-cartographer");
       const { devBanner } = await import("@replit/vite-plugin-dev-banner");
       
       plugins.push(
+        runtimeErrorOverlay(),
         cartographer({
           root: path.resolve(import.meta.dirname, ".."),
         }),
@@ -40,7 +42,7 @@ export default defineConfig(async () => {
     }
   }
 
-  // 3. Explicitly return the configuration object
+  // 3. Return the fully configured Vite options object
   return {
     base: getBasePath(),
     plugins,
