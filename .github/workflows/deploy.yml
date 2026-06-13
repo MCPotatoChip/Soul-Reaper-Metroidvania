@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main # Change this to 'master' if your main GitHub branch is called master
+      - main # Change this to 'master' if your main GitHub branch is named master
   workflow_dispatch:
 
 permissions:
@@ -29,21 +29,24 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
 
-      # Since your root has a package.json, we install the root workspace dependencies first
-      - name: Install Dependencies
-        run: npm install
+      # 1. Step into the correct artifacts/bleach-game folder to install packages
+      - name: Install Subproject Dependencies
+        run: |
+          cd artifacts/bleach-game
+          npm install
 
-      # This runs the build command specifically targeting your bleach-game build output
-      - name: Build Project
-        run: npm run build --prefix bleach-game --if-present || npx vite build bleach-game
+      # 2. Build the app directly inside artifacts/bleach-game
+      - name: Build Subproject
+        run: |
+          cd artifacts/bleach-game
+          npm run build
 
-      # Tells GitHub to upload the specific build folder inside your subproject
+      # 3. Upload the correct compiled target folder path
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './bleach-game/dist/public'
+          path: './artifacts/bleach-game/dist/public'
 
       - name: Deploy to GitHub Pages
         id: deployment
