@@ -57,7 +57,7 @@ echo   "rootDirectory": "artifacts/bleach-game">> vercel.json
 echo }>> vercel.json
 
 echo [INFO] Linking Vercel project workspace...
-vercel link --yes
+vercel link --yes --scope hamzahabib383-2861s-projects
 
 echo.
 echo [INFO] Cloud sync setup complete! You can now run "vercel deploy" or push to main to trigger deployments.
