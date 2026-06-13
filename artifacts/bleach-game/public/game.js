@@ -506,7 +506,7 @@ RM['r1']={zone:'rukon',w:30,h:17,
   t[6][5]=5;t[7][5]=5;t[8][5]=5;   // breakable entrance (shoot with Getsuga to open)
   for(let x=1;x<=4;x++)t[9][x]=2;  // alcove floor platform
   return t;})(),
-  enemies:[{type:'hollow',x:12,y:12},{type:'hollow',x:20,y:12},{type:'fly',x:16,y:7}],
+  enemies:[{type:'hollow',x:12,y:12},{type:'hollow',x:24,y:12},{type:'fly',x:20,y:7}],
   npcs:[{type:'urahara',x:6,y:13}],
   trans:[{x:29,yA:13,yB:14,to:'r2',tx:2,ty:15}],
   chests:[{id:'r1_c1',x:2*T,y:8*T,reward:'coins',amount:60}],
@@ -523,9 +523,10 @@ RM['r2']={zone:'rukon',w:40,h:20,
   for(let y=2;y<5;y++)t[y][29]=0;
   for(let x=30;x<w;x++)t[1][x]=1;for(let x=30;x<38;x++)t[4][x]=2;
   for(let y=1;y<h-2;y++)if(y!==3&&y!==4)t[y][w-1]=1;
+  t[3][w-1]=0; t[4][w-1]=0;
   for(let x=25;x<29;x++)t[h-2][x]=3;return t;})(),
-  enemies:[{type:'hollow',x:9,y:12},{type:'fly',x:22,y:10}],
-  npcs:[{type:'rukia',x:17,y:12}],
+  enemies:[{type:'hollow',x:14,y:12},{type:'fly',x:30,y:10}],
+  npcs:[{type:'rukia',x:7,y:12}],
   trans:[{x:0,yA:15,yB:16,to:'r1',tx:27,ty:13},{x:39,yA:3,yB:4,to:'r3',tx:2,ty:13}],
   chests:[{id:'r2_c1',x:27*T,y:3*T,reward:'coins',amount:60}],
   save:{x:16,y:12}};
@@ -543,15 +544,20 @@ RM['r3']={zone:'rukon',w:45,h:17,
   t[7][40]=5;t[8][40]=5;t[9][40]=5;  // breakable entrance (shoot from the y=10 platform)
   t[h-2][38]=0;t[h-2][39]=0;         // pit gap — fall risk without dash
   for(let x=41;x<44;x++)t[10][x]=2;  // alcove floor platform (land here after dashing)
+  for(let y=11;y<=14;y++)for(let x=41;x<=43;x++)t[y][x]=1; // block chest access from below
+  
+  // FIX: Explicitly open the exit door path
+  t[13][43]=0; t[14][43]=0; t[13][44]=0; t[14][44]=0;
+  
   return t;})(),
-  enemies:[{type:'hollow',x:22,y:12},{type:'fly',x:35,y:8},{type:'hollow',x:38,y:13}],
+  enemies:[{type:'hollow',x:22,y:12},{type:'fly',x:30,y:8},{type:'hollow',x:34,y:13}],
   npcs:[{type:'yoruichi',x:7,y:11}],
   trans:[{x:0,yA:13,yB:14,to:'r2',tx:37,ty:3},{x:44,yA:13,yB:14,to:'s1',tx:2,ty:13}],
   chests:[{id:'r3_c1',x:41*T,y:9*T,reward:'coins',amount:80}],
   save:{x:34,y:13}};
 
 RM['s1']={zone:'seireitei',w:40,h:17,
-  tiles:(()=>{let w=40,h=17,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2)?1:0;}
+  tiles:(()=> { let w=40,h=17,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2)?1:0;}
   for(let y=0;y<h;y++){if(y!==13&&y!==14)t[y][0]=1;if(y!==13&&y!==14)t[y][w-1]=1;}
   // Seireitei gate arch pillars — wide enough that guards can patrol between them
   for(let py=5;py<15;py++){t[py][15]=1;t[py][16]=1;} // left gate pillar pair
@@ -570,8 +576,11 @@ RM['s1']={zone:'seireitei',w:40,h:17,
   for(let y=1;y<=5;y++)t[y][5]=1;   // alcove right wall (top section only)
   t[3][5]=5;t[4][5]=5;t[5][5]=5;   // breakable entrance (need wall-jump against x=0 to reach)
   for(let x=1;x<=4;x++)t[7][x]=2;  // alcove floor platform
+  // FIX: Block sequence break from underneath
+  for(let y=8;y<=15;y++) { for(let x=1;x<=4;x++) { t[y][x]=1; } }
   return t;})(),
-  enemies:[{type:'guard',x:5,y:13},{type:'guard',x:14,y:10},{type:'guard',x:28,y:13}],
+  // FIX: Spaced out guards
+  enemies:[{type:'guard',x:20,y:13}, {type:'guard',x:9,y:13}, {type:'guard',x:34,y:13}],
   npcs:[],
   trans:[{x:0,yA:13,yB:14,to:'r3',tx:42,ty:13},{x:39,yA:13,yB:14,to:'boss1',tx:2,ty:10}],
   chests:[{id:'s1_c1',x:2*T,y:6*T,reward:'sl',amount:20}],
@@ -616,7 +625,8 @@ RM['s2']={zone:'seireitei',w:40,h:17,
   // Spike/trap tiles on the ground
   t[14][12]=3;t[14][22]=3;t[14][32]=3;
   return t;})(),
-  enemies:[{type:'guard',x:4,y:13},{type:'guard',x:22,y:13},{type:'guard',x:35,y:13},{type:'fly',x:15,y:4}],
+  // FIX: Updated guard patrol tracking
+  enemies:[{type:'guard',x:9,y:13}, {type:'guard',x:24,y:13}, {type:'guard',x:37,y:13}, {type:'fly',x:15,y:4}],
   npcs:[],
   trans:[{x:0,yA:13,yB:14,to:'post_renji',tx:42,ty:13},{x:39,yA:13,yB:14,to:'boss2',tx:2,ty:10}],
   chests:[{id:'s2_c1',x:35*T,y:5*T,reward:'hp',amount:1}],
@@ -660,7 +670,7 @@ RM['h1']={zone:'hueco',w:50,h:17,
   for(let x=5;x<14;x++)t[h-2][x]=6;
   for(let x=36;x<44;x++)t[h-2][x]=6;
   return t;})(),
-  enemies:[{type:'hollow',x:7,y:10},{type:'adjuchas',x:22,y:9},{type:'menos',x:39,y:9}],
+enemies: [{type:'hollow',x:7,y:10}, {type:'adjuchas',x:21,y:9}, {type:'menos',x:39,y:9}], // Shifted adjuchas slightly left
   npcs:[],
   trans:[{x:0,yA:13,yB:14,to:'victory',tx:22,ty:10},{x:49,yA:13,yB:14,to:'h2',tx:2,ty:13}],
   chests:[{id:'h1_c1',x:22*T,y:9*T,reward:'coins',amount:70}],
@@ -691,10 +701,10 @@ RM['h2']={zone:'hueco',w:45,h:20,
   for(let x=31;x<w;x++)t[h-2][x]=1;
   return t;})(),
   enemies:[{type:'adjuchas',x:23,y:13},{type:'adjuchas',x:33,y:11},{type:'menos',x:39,y:14}],
-  npcs:[{type:'nel',x:4,y:13}],
+ npcs: [{type:'nel',x:4,y:13}],
   trans:[{x:0,yA:13,yB:14,to:'h1',tx:47,ty:13},{x:44,yA:16,yB:17,to:'ln1',tx:2,ty:13}],
   chests:[{id:'h2_c1',x:24*T,y:10*T,reward:'coins',amount:60}],
-  save:{x:4,y:13}};
+  save:{x:30,y:13}};
 
 RM['ln1']={zone:'lasnoches',w:50,h:17,
   tiles:(()=>{let w=50,h=17,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2)?1:0;}
@@ -798,33 +808,6 @@ const P={
 
     const pwrMult=this.bkActive?1.4:(this.hmActive?1.25:1);
 
-    // ── Active Reiatsu Charge (hold C)
-    this.charging=false;
-    if(IN.held('charge')&&this.sl<this.mSl&&this.gnd&&this.aT<=0&&this.dT<=0&&this.hlT<=0){
-      this.charging=true;
-      this.chargeT++;
-      const rate=0.35+(this.chargeT>60?0.25:0);
-      this.sl=Math.min(this.mSl,this.sl+rate);
-      this.vx*=0.5; // exposed / slowed
-      if(fr%8===0){
-        sp(this.x+this.w/2,this.y+this.h/2,4,'#3366ff',2,25,3,'sp');
-        sp(this.x+this.w/2,this.y+this.h,3,'#66aaff',1.5,20,2,'sp');
-      }
-      if(fr%120===0)AU.play('charge');
-    } else {
-      this.chargeT=0;
-    }
-
-    // Update charge UI
-    const chargeUI=document.getElementById('charge-indicator');
-    const chargeFill=document.getElementById('charge-bar-fill');
-    if(this.charging){
-      chargeUI.style.display='flex';
-      chargeFill.style.width=(this.sl/this.mSl*100)+'%';
-    } else {
-      chargeUI.style.display='none';
-    }
-
     // ── Dash
     if(this.dT>0){
       this.dT--;this.vx=this.dD*DS*pwrMult;this.vy=0;
@@ -883,14 +866,15 @@ const P={
     if(IN.pressed('getsuga')&&this.hasGet&&this.sl>=GC&&this.aT<=0&&this.dT<=0&&this.hlT<=0&&!this.charging){
       this.sl-=GC;AU.play('getsuga');shk=8;fls=5;
       const d=pwrMult>1?12:8;
-      projs.push({x:this.x+this.w/2+this.fc*20,y:this.y+this.h/2-5,vx:this.fc*d,vy:0,w:pwrMult>1?50:40,h:pwrMult>1?25:20,dmg:Math.floor(15*pwrMult),life:40,fc:this.fc,getsuga:true,bk:this.bkActive});
+      projs.push({x:this.x+this.w/2+this.fc*20,y:this.y+this.h/2-5,vx:this.fc*d,vy:0,w:pwrMult>1?50:40,h:pwrMult>1?25:20,dmg:Math.floor(8*pwrMult),life:28,fc:this.fc,getsuga:true,bk:this.bkActive});
     }
+
 
     // ── Cero
     if(IN.pressed('cero')&&this.hasCero&&this.sl>=CC&&this.aT<=0&&this.dT<=0&&this.hlT<=0&&!this.charging){
       this.sl-=CC;AU.play('cero');shk=6;fls=4;
-      // Cero: faster and longer range than Getsuga (focused beam)
-      projs.push({x:this.x+this.w/2+this.fc*18,y:this.y+this.h/2,vx:this.fc*14,vy:0,w:22,h:22,dmg:Math.floor(12*pwrMult),life:60,fc:this.fc,cero:true});
+      // FIX: Damage reduced to 8, Life reduced to 35
+      projs.push({x:this.x+this.w/2+this.fc*18,y:this.y+this.h/2,vx:this.fc*14,vy:0,w:22,h:22,dmg:Math.floor(8*pwrMult),life:35,fc:this.fc,cero:true});
     }
 
     // ── Heal (F key)
@@ -899,9 +883,6 @@ const P={
 
     if(this.inv>0)this.inv--;
     this.collide(room);
-
-    // ── Reiatsu passive regen (slow)
-    if(!this.charging&&fr%180===0&&this.sl<this.mSl)this.sl=Math.min(this.mSl,this.sl+1);
 
     // ── Anim state
     this.at++;
@@ -992,13 +973,6 @@ const P={
       c.beginPath();c.arc(sx+this.w/2,sy+this.h/2,28+Math.sin(fr*.1)*4,0,Math.PI*2);c.fill();
       c.restore();
     }
-    // Charge aura
-    if(this.charging){
-      c.save();c.globalAlpha=0.15+Math.sin(fr*.2)*.08;
-      c.fillStyle='#3366ff';
-      c.beginPath();c.arc(sx+this.w/2,sy+this.h/2,32+Math.sin(fr*.15)*5,0,Math.PI*2);c.fill();
-      c.restore();
-    }
     drIchigo(c,sx,sy,this.fc,null,this.as,this.at,this.aD,this.aT,this.bkActive,this.hmActive,this.animFrame);
     c.globalAlpha=1;
 
@@ -1073,13 +1047,52 @@ function drIchigo(c,sx,sy,fc,ov,as,at,ad,atk,bk,hm,f){
   c.fillStyle=skinC;c.fillRect(sx+4,sy+4+bob,12,10);c.fillRect(sx+5,sy+12+bob,10,3);
   if(!ov){c.fillStyle='#e0a870';c.fillRect(sx+3,sy+7+bob,2,5);c.fillRect(sx+15,sy+7+bob,2,5);}
 
-  // Hollow mask — partial, left side
+  // Hollow mask — full face overlay when hollowfied
   if(hm&&!ov){
-    c.fillStyle='#f0f0e8';c.fillRect(sx+2,sy+2+bob,7,11);
-    c.fillStyle='#bb0000';c.fillRect(sx+2,sy+3+bob,3,5);
-    c.fillStyle='#000';c.fillRect(sx+3,sy+5+bob,3,3);
-    c.fillStyle='#f0f0e8';
-    for(let i=0;i<3;i++)c.fillRect(sx+3+i*2,sy+12+bob,2,2);
+    c.save();
+    c.translate(sx, sy + bob);
+    
+    // Crisp canvas path shape for the mask
+    c.fillStyle = '#f4f4f0';
+    c.beginPath();
+    c.moveTo(3, 2);
+    c.quadraticCurveTo(10, 0, 17, 2);
+    c.lineTo(18, 9);
+    c.lineTo(15, 16);
+    c.lineTo(5, 16);
+    c.lineTo(2, 9);
+    c.closePath();
+    c.fill();
+    
+    // Structural crimson geometric detail lines (left side)
+    c.strokeStyle = '#cc0000';
+    c.lineWidth = 1.2;
+    c.lineJoin = 'miter';
+    c.beginPath();
+    c.moveTo(4, 2); c.lineTo(6, 6); c.lineTo(5, 12);
+    c.moveTo(7, 2); c.lineTo(8, 5);
+    c.moveTo(3, 5); c.lineTo(6, 6);
+    c.stroke();
+    
+    // Eye sockets
+    c.fillStyle = '#0a0a0a';
+    c.beginPath();
+    c.moveTo(4, 6); c.lineTo(9, 5); c.lineTo(9, 10); c.lineTo(5, 10); c.closePath();
+    c.moveTo(11, 5); c.lineTo(16, 6); c.lineTo(15, 10); c.lineTo(11, 10); c.closePath();
+    c.fill();
+    
+    // Jaw teeth lines
+    c.strokeStyle = '#333';
+    c.lineWidth = 1;
+    c.beginPath();
+    c.moveTo(5, 13); c.lineTo(15, 13);
+    for(let i=0; i<=4; i++){
+      c.moveTo(6 + i*2, 12);
+      c.lineTo(6 + i*2, 16);
+    }
+    c.stroke();
+    
+    c.restore();
   }
 
   // Hair — spiky orange with depth
@@ -1144,7 +1157,7 @@ function upPr(room){
         return false;
       }
     }
-    if(boss&&boss.hp>0){
+    if(boss&&boss.hp>0&&boss.active){
       const bb=boss.bounds();
       if(p.x>bb.left&&p.x<bb.right&&p.y>bb.top&&p.y<bb.bottom){
         boss.takeDmg(p.dmg);sp(p.x,p.y,15,'#ff5500',5,25,4,'k');shk=6;return false;
@@ -1243,7 +1256,7 @@ class En{
     const spdMult=this.slowTimer>0?0.35:1;
 
     if(this.type==='hollow')this.upHollow(room,spdMult);
-    else if(this.type==='fly')this.upFly(spdMult);
+    else if(this.type==='fly')this.upFly(room,spdMult);
     else if(this.type==='guard'||this.type==='arrancar')this.upGuard(room,spdMult);
     else if(this.type==='menos')this.upMenos(room,spdMult);
     else if(this.type==='adjuchas')this.upAdjuchas(room,spdMult);
@@ -1266,8 +1279,8 @@ class En{
         this.state='attack';this.st=30;this.acd=80;this.vx=this.fc*3.5*sm;this.vy=-5;
       }
     } else {
-      const alert=pdist<this.alertRange&&Math.abs(pdy)<T*3;
-      const chasing=pdist<this.chaseRange&&Math.abs(pdy)<T*3.5;
+      const alert=pdist<this.alertRange&&Math.abs(pdy)<48&&Math.abs(pdx)<160;
+      const chasing=pdist<this.chaseRange&&Math.abs(pdy)<48&&Math.abs(pdx)<160;
       if(chasing){
         const wantDir=pdx>0?1:-1;
         if(alert&&this.gnd&&this.acd<=0){
@@ -1291,11 +1304,15 @@ class En{
       }
     }
     this.vy+=G;if(this.vy>MF)this.vy=MF;
+    if(this.state==='patrol'&&this.vx!==0&&this.gnd){
+      const nX=this.x+this.vx+(this.vx>0?this.w:0),tX=~~(nX/T),tY=~~((this.y+this.h+4)/T);
+      if(tX>=0&&tX<room.w&&tY>=0&&tY<room.h&&!room.tiles[tY][tX]){this.fc*=-1;this.vx*=-1;this.x-=this.vx;}
+    }
     this.x+=this.vx;this.y+=this.vy;this.resFull(room);
   }
 
   // ────── FLY AI ──────
-  upFly(sm){
+  upFly(room,sm){
     const dx=P.x-this.x,dy=P.y-this.y,d=Math.sqrt(dx*dx+dy*dy);
     if(this.state==='telegraph'){
       this.vx*=.8;this.vy*=.8;this.st--;
@@ -1307,7 +1324,7 @@ class En{
     } else if(this.state==='swoop'){
       this.st--;
       if(this.st<=0){this.state='idle';this.acd=40;}
-    } else if(d<this.chaseRange&&d>8){
+    } else if(d<this.chaseRange&&d>8&&Math.abs(dx)<160&&Math.abs(dy)<48){
       if(this.acd>0)this.acd--;
       const ty=P.y-80;
       const ndx=dx,ndy=ty-this.y,nd=Math.sqrt(ndx*ndx+ndy*ndy)||1;
@@ -1326,7 +1343,21 @@ class En{
     const s=Math.sqrt(this.vx**2+this.vy**2)||1;
     if(s>maxSpd){this.vx=(this.vx/s)*maxSpd;this.vy=(this.vy/s)*maxSpd;}
     this.fc=this.vx>0?1:-1;
-    this.x+=this.vx;this.y+=this.vy;
+    this.x+=this.vx;
+    let b=this.bounds();
+    for(let ty=~~(b.top/T);ty<=~~(b.bottom/T);ty++)
+      for(let tx=~~(b.left/T);tx<=~~(b.right/T);tx++)
+        if(ty>=0&&ty<room.h&&tx>=0&&tx<room.w&&room.tiles[ty][tx]===1){
+          if(this.vx>0)this.x=tx*T-this.w;else if(this.vx<0)this.x=(tx+1)*T;
+          this.vx=0;b=this.bounds();
+        }
+    this.y+=this.vy;b=this.bounds();
+    for(let ty=~~(b.top/T);ty<=~~(b.bottom/T);ty++)
+      for(let tx=~~(b.left/T);tx<=~~(b.right/T);tx++)
+        if(ty>=0&&ty<room.h&&tx>=0&&tx<room.w&&room.tiles[ty][tx]===1){
+          if(this.vy>0)this.y=ty*T-this.h;else if(this.vy<0)this.y=(ty+1)*T;
+          this.vy=0;b=this.bounds();
+        }
   }
 
   // ────── GUARD / ARRANCAR AI ──────
@@ -1349,7 +1380,7 @@ class En{
     } else {
       if(pdist<(this.atkR||52)&&Math.abs(pdy)<48&&this.acd<=0){
         this.state='telegraph';this.st=15;this.fc=pdx>0?1:-1;this.vx=0;
-      } else if(pdist<this.chaseRange&&Math.abs(pdy)<T*3.5){
+      } else if(pdist<this.chaseRange&&Math.abs(pdy)<48&&Math.abs(pdx)<160){
         this.state='chase';
         const wantDir=pdx>0?1:-1;
         this.fc=wantDir;
@@ -1388,7 +1419,7 @@ class En{
         AU.play('cero');shk=3;
       }
     } else {
-      if(ad<this.chaseRange&&ady<T*3.5){
+      if(ad<160&&ady<48){
         this.state='alert';
         this.fc=pdx>0?1:-1;
         if(this.acd<=0&&ad<200&&ady<T*2.5){
@@ -1424,7 +1455,7 @@ class En{
         this.state='attack';this.st=30;this.acd=80;this.vx=this.fc*4.5*sm;this.vy=-5.5;AU.play('dash');
       }
     } else {
-      if(pdist<this.chaseRange&&Math.abs(pdy)<T*3){
+      if(pdist<this.chaseRange&&Math.abs(pdy)<48&&Math.abs(pdx)<160){
         const wantDir=pdx>0?1:-1;
         if(pdist<100&&this.acd<=0&&this.gnd){
           this.state='telegraph';this.st=15;this.fc=wantDir;this.vx=0;
@@ -1479,6 +1510,21 @@ class En{
             if(this.vy>0){this.y=r.top-this.h;this.gnd=true;}
             else if(this.vy<0&&tl!==2){this.y=r.bottom;}
             this.vy=0;b=this.bounds();
+          }
+        }
+      }
+    // Safety pass — nudge out of any remaining wall overlap after knockback
+    b=this.bounds();
+    for(let ty=~~(b.top/T);ty<=~~(b.bottom/T);ty++)
+      for(let tx=~~(b.left/T);tx<=~~(b.right/T);tx++){
+        if(ty<0||ty>=room.h||tx<0||tx>=room.w)continue;
+        const tl=room.tiles[ty]?room.tiles[ty][tx]:0;
+        if(tl===1||tl===5){
+          const r={left:tx*T,top:ty*T,right:(tx+1)*T,bottom:(ty+1)*T};
+          if(rO(b,r)){
+            const cx=this.x+this.w/2, rcx=r.left+T/2;
+            if(cx<rcx)this.x=r.left-this.w-2;else this.x=r.right+2;
+            this.vx=0;b=this.bounds();
           }
         }
       }
@@ -2648,12 +2694,10 @@ function dHUD(c){
   c.fillStyle='#1a1a30';c.fillRect(12,34,130,9);c.strokeStyle='#3a3a66';c.lineWidth=1;c.strokeRect(12,34,130,9);
   const sp_=P.sl/P.mSl;
   if(sp_>0){
-    const barColor=P.charging?'#66aaff':'#5599ff';
-    c.fillStyle=barColor;c.fillRect(13,35,128*sp_,7);
-    if(P.charging){c.shadowColor='#66aaff';c.shadowBlur=8;c.fillRect(13,35,128*sp_,7);c.shadowBlur=0;}
+    c.fillStyle='#5599ff';c.fillRect(13,35,128*sp_,7);
   }
   c.fillStyle='#8899cc';c.font='8px monospace';c.textAlign='left';
-  c.fillText(P.charging?'CHARGING! [C]':'REIATSU',12,32);
+  c.fillText('REIATSU',12,32);
 
   // Bankai bar
   if(P.hasBankai){
@@ -2833,7 +2877,7 @@ function render(){
   dSave(c,cR.save,cx,cy);dChests(c,cx,cy);
   for(const n of npcs)n.draw(c,cx,cy);
   for(const e of ens)if(e.hp>0)e.draw(c,cx,cy);
-  if(boss)boss.draw(c,cx,cy);
+  if(boss&&(boss.active||boss.defeated))boss.draw(c,cx,cy);
   drBP(c,cx,cy);P.draw(c,cx,cy);drPr(c,cx,cy);
   for(const p of pts)p.draw(c,cx,cy);
   dFG(c,zone);
