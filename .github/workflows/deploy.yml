@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main # Change this to 'master' if your main GitHub branch is named master
+      - main # Change this to 'master' if your primary branch is called master
   workflow_dispatch:
 
 permissions:
@@ -30,19 +30,19 @@ jobs:
         with:
           node-version: 20
 
-      # 1. Step into the correct artifacts/bleach-game folder to install packages
+      # 1. Step into the actual artifacts folder location to parse your packages
       - name: Install Subproject Dependencies
         run: |
           cd artifacts/bleach-game
           npm install
 
-      # 2. Build the app directly inside artifacts/bleach-game
+      # 2. Compile Vite distribution assets using localized scripts
       - name: Build Subproject
         run: |
           cd artifacts/bleach-game
           npm run build
 
-      # 3. Upload the correct compiled target folder path
+      # 3. Target the correct output assets folder for GitHub pages hosting
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v3
         with:
