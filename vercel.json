@@ -1,5 +1,4 @@
 {
-  "name": "soul-reaper-metroidvania",
-  "buildCommand": "pnpm --filter @workspace/bleach-game build",
-  "rootDirectory": "artifacts/bleach-game"
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true
 }
