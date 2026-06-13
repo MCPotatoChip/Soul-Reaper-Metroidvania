@@ -6,10 +6,6 @@ on:
       - main # Change to 'master' if your primary branch is master
   workflow_dispatch:
 
-# Future-proof the pipeline by forcing JavaScript actions to run on Node 24
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 permissions:
   contents: read
   pages: write
@@ -26,17 +22,19 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
+      # Upgraded to v6 (Native Node 24 target)
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
+      # Upgraded to v6 (Native Node 24 target)
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 24 # Upgraded from 20 to 24
+          node-version: 24
 
-      # Install PNPM on the runner to support your workspace configuration
+      # Upgraded to v5 (Native Node 24 target)
       - name: Install PNPM
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
         with:
           version: 9
 
