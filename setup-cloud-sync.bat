@@ -51,6 +51,7 @@ git push -u origin main
 echo.
 echo [INFO] Creating vercel.json for project configuration...
 echo {> vercel.json
+echo   "name": "soul-reaper-metroidvania",>> vercel.json
 echo   "buildCommand": "pnpm --filter @workspace/bleach-game build",>> vercel.json
 echo   "rootDirectory": "artifacts/bleach-game">> vercel.json
 echo }>> vercel.json
