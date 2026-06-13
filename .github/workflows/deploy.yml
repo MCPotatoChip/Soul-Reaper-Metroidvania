@@ -3,8 +3,12 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main # Change this to 'master' if your primary branch is master
+      - main # Change to 'master' if your primary branch is master
   workflow_dispatch:
+
+# Future-proof the pipeline by forcing JavaScript actions to run on Node 24
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 permissions:
   contents: read
@@ -28,23 +32,23 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24 # Upgraded from 20 to 24
 
-      # 1. Install PNPM on the runner to support your workspace configuration
+      # Install PNPM on the runner to support your workspace configuration
       - name: Install PNPM
         uses: pnpm/action-setup@v4
         with:
           version: 9
 
-      # 2. Bootstrap dependencies for the entire workspace from the root folder
+      # Bootstrap dependencies for the entire workspace from the root folder
       - name: Install Workspace Dependencies
         run: pnpm install --no-frozen-lockfile
 
-      # 3. Build the bleach-game app using the monorepo filter scope
+      # Build the bleach-game app using the monorepo filter scope
       - name: Build Game Subproject
         run: pnpm --filter @workspace/bleach-game run build
 
-      # 4. Upload the compiled artifact bundle
+      # Upload the compiled artifact bundle
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v3
         with:
