@@ -576,8 +576,8 @@ RM['s1']={zone:'seireitei',w:40,h:17,
   for(let y=1;y<=5;y++)t[y][5]=1;   // alcove right wall (top section only)
   t[3][5]=5;t[4][5]=5;t[5][5]=5;   // breakable entrance (need wall-jump against x=0 to reach)
   for(let x=1;x<=4;x++)t[7][x]=2;  // alcove floor platform
-  // FIX: Block sequence break from underneath
-  for(let y=8;y<=15;y++) { for(let x=1;x<=4;x++) { t[y][x]=1; } }
+  // Block sequence break from underneath (stop before exit corridor rows 13-14)
+  for(let y=8;y<=12;y++) { for(let x=1;x<=4;x++) { t[y][x]=1; } }
   return t;})(),
   // FIX: Spaced out guards
   enemies:[{type:'guard',x:20,y:13}, {type:'guard',x:9,y:13}, {type:'guard',x:34,y:13}],
@@ -641,8 +641,10 @@ RM['boss2']={zone:'seireitei',w:30,h:14,
   trans:[{x:0,yA:10,yB:11,to:'s2',tx:37,ty:13}],save:null};
 
 RM['victory']={zone:'seireitei',w:25,h:14,
-  tiles:(()=>{let w=25,h=14,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2||x===0)?1:0;}
-  for(let y=0;y<h;y++)if(y!==10&&y!==11)t[y][w-1]=1;return t;})(),
+  tiles:(()=>{let w=25,h=14,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2)?1:0;}
+  // Left wall solid except exit rows 10-11; right wall solid except exit rows 10-11
+  for(let y=0;y<h;y++){if(y!==10&&y!==11)t[y][0]=1;if(y!==10&&y!==11)t[y][w-1]=1;}
+  return t;})(),
   enemies:[],npcs:[{type:'urahara3',x:10,y:11}],
   trans:[{x:0,yA:10,yB:11,to:'boss2',tx:26,ty:10},{x:24,yA:10,yB:11,to:'h1',tx:2,ty:13}],
   save:{x:5,y:11}};
