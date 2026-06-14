@@ -500,17 +500,10 @@ RM['r1']={zone:'rukon',w:30,h:17,
   tiles:(()=>{let w=30,h=17,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2||x===0)?1:0;}
   for(let x=8;x<12;x++)t[11][x]=2;for(let x=16;x<20;x++)t[9][x]=2;for(let x=22;x<26;x++)t[11][x]=2;
   t[14][10]=3;t[14][11]=3;
-  for(let y=1;y<h-2;y++)if(y!==13&&y!==14)t[y][w-1]=1;
-  // Secret alcove (upper-left corner, behind breakable wall — no ability required)
-  for(let y=1;y<=8;y++)t[y][5]=1;  // alcove right wall
-  t[6][5]=5;t[7][5]=5;t[8][5]=5;   // breakable entrance (shoot with Getsuga to open)
-  for(let x=1;x<=4;x++)t[9][x]=2;  // alcove floor platform
-  return t;})(),
-  enemies:[{type:'hollow',x:12,y:12},{type:'hollow',x:24,y:12},{type:'fly',x:20,y:7}],
+  for(let y=1;y<h-2;y++)if(y!==13&&y!==14)t[y][w-1]=1;return t;})(),
+  enemies:[{type:'hollow',x:12,y:12},{type:'hollow',x:20,y:12},{type:'fly',x:16,y:7}],
   npcs:[{type:'urahara',x:6,y:13}],
-  trans:[{x:29,yA:13,yB:14,to:'r2',tx:2,ty:15}],
-  chests:[{id:'r1_c1',x:2*T,y:8*T,reward:'coins',amount:60}],
-  save:null};
+  trans:[{x:29,yA:13,yB:14,to:'r2',tx:2,ty:15}],save:null};
 
 RM['r2']={zone:'rukon',w:40,h:20,
   tiles:(()=>{let w=40,h=20,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2)?1:0;}
@@ -523,12 +516,10 @@ RM['r2']={zone:'rukon',w:40,h:20,
   for(let y=2;y<5;y++)t[y][29]=0;
   for(let x=30;x<w;x++)t[1][x]=1;for(let x=30;x<38;x++)t[4][x]=2;
   for(let y=1;y<h-2;y++)if(y!==3&&y!==4)t[y][w-1]=1;
-  t[3][w-1]=0; t[4][w-1]=0;
   for(let x=25;x<29;x++)t[h-2][x]=3;return t;})(),
-  enemies:[{type:'hollow',x:14,y:12},{type:'fly',x:30,y:10}],
-  npcs:[{type:'rukia',x:7,y:12}],
+  enemies:[{type:'hollow',x:9,y:12},{type:'fly',x:22,y:10}],
+  npcs:[{type:'rukia',x:17,y:12}],
   trans:[{x:0,yA:15,yB:16,to:'r1',tx:27,ty:13},{x:39,yA:3,yB:4,to:'r3',tx:2,ty:13}],
-  chests:[{id:'r2_c1',x:27*T,y:3*T,reward:'coins',amount:60}],
   save:{x:16,y:12}};
 
 RM['r3']={zone:'rukon',w:45,h:17,
@@ -538,52 +529,22 @@ RM['r3']={zone:'rukon',w:45,h:17,
   for(let x=15;x<20;x++){t[h-2][x]=0;t[h-3][x]=0;}for(let x=15;x<20;x++)t[h-3][x]=3;
   for(let x=25;x<32;x++){t[h-2][x]=0;t[h-3][x]=0;}for(let x=25;x<32;x++)t[h-3][x]=3;
   for(let x=20;x<25;x++)t[13][x]=1;
-  for(let x=32;x<w;x++)t[h-2][x]=1;for(let x=36;x<40;x++)t[10][x]=2;
-  // Dash-challenge alcove (upper-right, requires Shunpo/dash to cross the 3-tile pit gap)
-  for(let y=1;y<=9;y++)t[y][40]=1;   // alcove left wall
-  t[7][40]=5;t[8][40]=5;t[9][40]=5;  // breakable entrance (shoot from the y=10 platform)
-  t[h-2][38]=0;t[h-2][39]=0;         // pit gap — fall risk without dash
-  for(let x=41;x<44;x++)t[10][x]=2;  // alcove floor platform (land here after dashing)
-  for(let y=11;y<=14;y++)for(let x=41;x<=43;x++)t[y][x]=1; // block chest access from below
-  
-  // FIX: Explicitly open the exit door path
-  t[13][43]=0; t[14][43]=0; t[13][44]=0; t[14][44]=0;
-  
-  return t;})(),
-  enemies:[{type:'hollow',x:22,y:12},{type:'fly',x:30,y:8},{type:'hollow',x:34,y:13}],
+  for(let x=32;x<w;x++)t[h-2][x]=1;for(let x=36;x<40;x++)t[10][x]=2;return t;})(),
+  enemies:[{type:'hollow',x:22,y:12},{type:'fly',x:35,y:8},{type:'hollow',x:38,y:13}],
   npcs:[{type:'yoruichi',x:7,y:11}],
   trans:[{x:0,yA:13,yB:14,to:'r2',tx:37,ty:3},{x:44,yA:13,yB:14,to:'s1',tx:2,ty:13}],
-  chests:[{id:'r3_c1',x:41*T,y:9*T,reward:'coins',amount:80}],
   save:{x:34,y:13}};
 
 RM['s1']={zone:'seireitei',w:40,h:17,
-  tiles:(()=> { let w=40,h=17,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2)?1:0;}
+  tiles:(()=>{let w=40,h=17,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2)?1:0;}
   for(let y=0;y<h;y++){if(y!==13&&y!==14)t[y][0]=1;if(y!==13&&y!==14)t[y][w-1]=1;}
-  // Seireitei gate arch pillars — wide enough that guards can patrol between them
-  for(let py=5;py<15;py++){t[py][15]=1;t[py][16]=1;} // left gate pillar pair
-  for(let py=5;py<15;py++){t[py][23]=1;t[py][24]=1;} // right gate pillar pair
-  // Left section platforms (open ground below)
-  for(let x=3;x<10;x++)t[9][x]=2;   // left low platform
-  for(let x=3;x<8;x++)t[6][x]=2;    // left high platform
-  for(let x=11;x<15;x++)t[11][x]=2; // left-center step platform
-  // Right section platforms
-  for(let x=25;x<32;x++)t[9][x]=2;  // right low platform
-  for(let x=29;x<36;x++)t[6][x]=2;  // right high platform
-  for(let x=17;x<23;x++)t[11][x]=2; // right-center step platform
-  // Gate top beam (decorative)
-  for(let x=15;x<25;x++)t[4][x]=1;
-  // Wall-jump secret alcove (upper-left, requires wall-jump to reach y=3-5 level)
-  for(let y=1;y<=5;y++)t[y][5]=1;   // alcove right wall (top section only)
-  t[3][5]=5;t[4][5]=5;t[5][5]=5;   // breakable entrance (need wall-jump against x=0 to reach)
-  for(let x=1;x<=4;x++)t[7][x]=2;  // alcove floor platform
-  // Block sequence break from underneath (stop before exit corridor rows 13-14)
-  for(let y=8;y<=12;y++) { for(let x=1;x<=4;x++) { t[y][x]=1; } }
-  return t;})(),
-  // FIX: Spaced out guards
-  enemies:[{type:'guard',x:20,y:13}, {type:'guard',x:9,y:13}, {type:'guard',x:34,y:13}],
+  for(let p=0;p<4;p++){const px=8+p*8;for(let py=5;py<15;py++)t[py][px]=1;}
+  for(let x=3;x<8;x++)t[8][x]=2;for(let x=9;x<16;x++)t[6][x]=2;
+  for(let x=17;x<24;x++)t[8][x]=2;for(let x=25;x<32;x++)t[6][x]=2;
+  for(let x=33;x<38;x++)t[10][x]=2;return t;})(),
+  enemies:[{type:'guard',x:10,y:13},{type:'guard',x:22,y:13},{type:'guard',x:34,y:9}],
   npcs:[],
   trans:[{x:0,yA:13,yB:14,to:'r3',tx:42,ty:13},{x:39,yA:13,yB:14,to:'boss1',tx:2,ty:10}],
-  chests:[{id:'s1_c1',x:2*T,y:6*T,reward:'sl',amount:20}],
   save:{x:35,y:13}};
 
 RM['boss1']={zone:'seireitei',w:28,h:14,
@@ -607,29 +568,13 @@ RM['post_renji']={zone:'seireitei',w:45,h:17,
 RM['s2']={zone:'seireitei',w:40,h:17,
   tiles:(()=>{let w=40,h=17,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2)?1:0;}
   for(let y=0;y<h;y++){if(y!==13&&y!==14)t[y][0]=1;if(y!==13&&y!==14)t[y][w-1]=1;}
-  // Inner Seireitei — ascending staircase layout with open ground corridors
-  // Open ground floor everywhere so guards can patrol
-  // Rooftop platforms (staggered ascending)
-  for(let x=3;x<10;x++)t[11][x]=2;  // left roof ledge
-  for(let x=3;x<7;x++)t[8][x]=2;    // left high rooftop
-  for(let x=11;x<19;x++)t[9][x]=2;  // center-left platform
-  for(let x=13;x<18;x++)t[6][x]=2;  // upper center platform
-  for(let x=19;x<32;x++)t[6][x]=2;  // ALTERNATE HIGH ROAD — bridges center to right upper path
-  for(let x=21;x<29;x++)t[11][x]=2; // center-right step
-  for(let x=30;x<37;x++)t[9][x]=2;  // right platform
-  for(let x=32;x<37;x++)t[6][x]=2;  // upper right platform
-  // Short wall columns (not full pillars — guards can go around at ground)
-  for(let py=9;py<15;py++)t[py][10]=1;  // left column
-  for(let py=7;py<15;py++)t[py][20]=1;  // center column
-  for(let py=9;py<15;py++)t[py][29]=1;  // right column
-  // Spike/trap tiles on the ground
-  t[14][12]=3;t[14][22]=3;t[14][32]=3;
-  return t;})(),
-  // FIX: Updated guard patrol tracking
-  enemies:[{type:'guard',x:9,y:13}, {type:'guard',x:24,y:13}, {type:'guard',x:37,y:13}, {type:'fly',x:15,y:4}],
+  for(let p=0;p<5;p++){const px=6+p*7;for(let py=6;py<15;py++)t[py][px]=1;}
+  for(let x=3;x<6;x++)t[9][x]=2;for(let x=7;x<13;x++)t[7][x]=2;for(let x=14;x<20;x++)t[9][x]=2;
+  for(let x=21;x<27;x++)t[7][x]=2;for(let x=28;x<34;x++)t[9][x]=2;for(let x=35;x<38;x++)t[11][x]=2;
+  t[14][10]=3;t[14][17]=3;t[14][24]=3;return t;})(),
+  enemies:[{type:'guard',x:10,y:13},{type:'guard',x:18,y:13},{type:'guard',x:30,y:8},{type:'fly',x:25,y:4}],
   npcs:[],
   trans:[{x:0,yA:13,yB:14,to:'post_renji',tx:42,ty:13},{x:39,yA:13,yB:14,to:'boss2',tx:2,ty:10}],
-  chests:[{id:'s2_c1',x:35*T,y:5*T,reward:'hp',amount:1}],
   save:{x:36,y:13}};
 
 RM['boss2']={zone:'seireitei',w:30,h:14,
@@ -641,10 +586,8 @@ RM['boss2']={zone:'seireitei',w:30,h:14,
   trans:[{x:0,yA:10,yB:11,to:'s2',tx:37,ty:13}],save:null};
 
 RM['victory']={zone:'seireitei',w:25,h:14,
-  tiles:(()=>{let w=25,h=14,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2)?1:0;}
-  // Left wall solid except exit rows 10-11; right wall solid except exit rows 10-11
-  for(let y=0;y<h;y++){if(y!==10&&y!==11)t[y][0]=1;if(y!==10&&y!==11)t[y][w-1]=1;}
-  return t;})(),
+  tiles:(()=>{let w=25,h=14,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2||x===0)?1:0;}
+  for(let y=0;y<h;y++)if(y!==10&&y!==11)t[y][w-1]=1;return t;})(),
   enemies:[],npcs:[{type:'urahara3',x:10,y:11}],
   trans:[{x:0,yA:10,yB:11,to:'boss2',tx:26,ty:10},{x:24,yA:10,yB:11,to:'h1',tx:2,ty:13}],
   save:{x:5,y:11}};
@@ -652,84 +595,38 @@ RM['victory']={zone:'seireitei',w:25,h:14,
 RM['h1']={zone:'hueco',w:50,h:17,
   tiles:(()=>{let w=50,h=17,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2)?1:0;}
   for(let y=0;y<h;y++){if(y!==13&&y!==14)t[y][0]=1;if(y!==13&&y!==14)t[y][w-1]=1;}
-  // Hueco Mundo desert — dune-top platforms over open sandy ground
-  // Left dune formation
-  for(let x=5;x<14;x++)t[11][x]=2;  // left dune crest
-  for(let x=6;x<13;x++)t[12][x]=2;  // dune base layer
-  // Center-left bone pillar walls (open ground between them)
-  for(let py=8;py<15;py++){t[py][15]=1;t[py][16]=1;}
-  // Center dune (higher — harder to reach)
-  for(let x=18;x<28;x++)t[10][x]=2; // center dune crest
-  for(let x=19;x<27;x++)t[11][x]=2; // second layer
-  // Sand pits (hazardous) — positioned away from enemy spawns
-  for(let x=28;x<32;x++){t[h-2][x]=0;t[h-1][x]=7;}
-  // Center-right bone pillar walls
-  for(let py=7;py<15;py++){t[py][33]=1;t[py][34]=1;}
-  // Right dune
-  for(let x=36;x<44;x++)t[11][x]=2; // right dune crest
-  for(let x=37;x<43;x++)t[12][x]=2; // dune base
-  // Quicksand visual at dune bases (non-damaging)
-  for(let x=5;x<14;x++)t[h-2][x]=6;
-  for(let x=36;x<44;x++)t[h-2][x]=6;
-  return t;})(),
-enemies: [{type:'hollow',x:7,y:10}, {type:'adjuchas',x:21,y:9}, {type:'menos',x:39,y:9}], // Shifted adjuchas slightly left
+  for(let x=10;x<15;x++)t[h-2][x]=6;
+  for(let x=25;x<32;x++){t[h-2][x]=0;t[h-1][x]=7;}
+  for(let x=8;x<12;x++)t[11][x]=2;for(let x=18;x<24;x++)t[10][x]=2;for(let x=35;x<40;x++)t[9][x]=2;
+  for(let py=8;py<15;py++){t[py][20]=1;t[py][38]=1;}return t;})(),
+  enemies:[{type:'hollow',x:12,y:13},{type:'adjuchas',x:28,y:13},{type:'menos',x:42,y:10}],
   npcs:[],
   trans:[{x:0,yA:13,yB:14,to:'victory',tx:22,ty:10},{x:49,yA:13,yB:14,to:'h2',tx:2,ty:13}],
-  chests:[{id:'h1_c1',x:22*T,y:9*T,reward:'coins',amount:70}],
   save:{x:5,y:13}};
 
 RM['h2']={zone:'hueco',w:45,h:20,
   tiles:(()=>{let w=45,h=20,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2)?1:0;}
   for(let y=0;y<h;y++){if(y!==13&&y!==14)t[y][0]=1;if(y!==16&&y!==17)t[y][w-1]=1;}
-  // Nel's valley — layered terrain, no enemies near left entrance or pit edges
-  // Left ledge (Nel's rest area, safe zone)
-  for(let x=3;x<10;x++)t[14][x]=2;
-  for(let x=3;x<7;x++)t[11][x]=2;  // upper Nel ledge
-  // Gap between Nel area and middle terrain (open chasm)
-  // Central raised bone-terrain mound (solid, not a pit hazard)
-  for(let x=11;x<17;x++)t[h-2][x]=1;  // raised ground left block
-  for(let x=12;x<16;x++)t[h-3][x]=1;  // second layer
-  // Sand pit (clearly separated from enemy spawns)
-  for(let x=17;x<21;x++){t[h-2][x]=0;t[h-1][x]=7;}
-  // Central platform above pit (enemies land here)
-  for(let x=21;x<30;x++)t[14][x]=2;
-  for(let x=22;x<29;x++)t[11][x]=2;  // upper central platform
-  // Wall column separating sections
-  for(let py=9;py<18;py++)t[py][30]=1;
-  // Right section — staggered descent toward exit
-  for(let x=31;x<38;x++)t[12][x]=2;
-  for(let x=37;x<43;x++)t[15][x]=2;
-  // Right section solid ground near exit
-  for(let x=31;x<w;x++)t[h-2][x]=1;
-  return t;})(),
-  enemies:[{type:'adjuchas',x:23,y:13},{type:'adjuchas',x:33,y:11},{type:'menos',x:39,y:14}],
- npcs: [{type:'nel',x:4,y:13}],
+  for(let x=5;x<10;x++)t[12][x]=2;
+  for(let x=15;x<20;x++){t[h-2][x]=0;t[h-3][x]=0;t[h-4][x]=0;t[h-1][x]=7;}
+  for(let x=18;x<25;x++)t[h-2][x]=1;
+  for(let x=22;x<28;x++)t[17][x]=2;for(let x=30;x<w;x++)t[h-2][x]=1;
+  for(let x=32;x<38;x++)t[15][x]=2;return t;})(),
+  enemies:[{type:'adjuchas',x:24,y:16},{type:'adjuchas',x:35,y:14},{type:'menos',x:40,y:15}],
+  npcs:[{type:'nel',x:7,y:11}],
   trans:[{x:0,yA:13,yB:14,to:'h1',tx:47,ty:13},{x:44,yA:16,yB:17,to:'ln1',tx:2,ty:13}],
-  chests:[{id:'h2_c1',x:24*T,y:10*T,reward:'coins',amount:60}],
-  save:{x:30,y:13}};
+  save:{x:24,y:16}};
 
 RM['ln1']={zone:'lasnoches',w:50,h:17,
   tiles:(()=>{let w=50,h=17,t=[];for(let y=0;y<h;y++){t[y]=[];for(let x=0;x<w;x++)t[y][x]=(y===0||y>=h-2)?1:0;}
   for(let y=0;y<h;y++){if(y!==13&&y!==14)t[y][0]=1;if(y!==13&&y!==14)t[y][w-1]=1;}
-  // Las Noches — paired pillar columns with WIDE open corridors between them
-  // Pillar pairs leave 10+ tile gaps so arrancar can patrol freely between them
-  for(let py=3;py<15;py++){t[py][11]=1;t[py][12]=1;}  // first pillar pair (x=11-12)
-  for(let py=3;py<15;py++){t[py][24]=1;t[py][25]=1;}  // second pillar pair (x=24-25)
-  for(let py=3;py<15;py++){t[py][37]=1;t[py][38]=1;}  // third pillar pair (x=37-38)
-  // Platforms between pillars at varying heights
-  for(let x=3;x<11;x++)t[8][x]=2;    // left section platform
-  for(let x=3;x<8;x++)t[5][x]=2;     // left high platform
-  for(let x=13;x<24;x++)t[9][x]=2;   // center-left wide platform (arrancar patrols here)
-  for(let x=15;x<22;x++)t[6][x]=2;   // upper center platform
-  for(let x=26;x<37;x++)t[9][x]=2;   // center-right wide platform
-  for(let x=28;x<35;x++)t[6][x]=2;   // upper right platform
-  for(let x=39;x<47;x++)t[10][x]=2;  // far-right platform
-  for(let x=41;x<47;x++)t[7][x]=2;   // far-right upper platform
-  return t;})(),
-  enemies:[{type:'arrancar',x:4,y:7},{type:'arrancar',x:16,y:8},{type:'arrancar',x:28,y:8},{type:'adjuchas',x:41,y:9}],
+  for(let p=0;p<6;p++){const px=6+p*7;for(let py=4;py<15;py++)t[py][px]=1;}
+  for(let x=3;x<6;x++)t[8][x]=2;for(let x=7;x<13;x++)t[6][x]=2;for(let x=14;x<20;x++)t[8][x]=2;
+  for(let x=21;x<27;x++)t[6][x]=2;for(let x=28;x<34;x++)t[8][x]=2;for(let x=35;x<41;x++)t[6][x]=2;
+  for(let x=42;x<48;x++)t[10][x]=2;return t;})(),
+  enemies:[{type:'arrancar',x:10,y:13},{type:'arrancar',x:24,y:13},{type:'arrancar',x:38,y:5},{type:'adjuchas',x:45,y:9}],
   npcs:[{type:'urahara4',x:4,y:13}],
   trans:[{x:0,yA:13,yB:14,to:'h2',tx:42,ty:16},{x:49,yA:13,yB:14,to:'boss3',tx:2,ty:10}],
-  chests:[{id:'ln1_c1',x:43*T,y:6*T,reward:'coins',amount:100}],
   save:{x:44,y:13}};
 
 RM['boss3']={zone:'lasnoches',w:32,h:14,
